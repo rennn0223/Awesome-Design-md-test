@@ -142,7 +142,7 @@ export default function Certificates({ lang }: { lang: Lang }) {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-          className="text-[clamp(2.5rem,8vw,4.5rem)] font-black tracking-[-3px] uppercase text-center mb-20"
+          className="text-[clamp(2.5rem,8vw,4.5rem)] font-black tracking-[-1px] sm:tracking-[-3px] uppercase text-center mb-20"
         >
           {lang === "en" ? "SYSTEM_CERTIFICATES" : "專業認證與授權"}
         </motion.h2>

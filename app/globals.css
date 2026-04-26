@@ -19,6 +19,10 @@ body {
   cursor: none;
 }
 
+@media (pointer: coarse) {
+  body { cursor: auto; }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: #0a0a0a; }
@@ -42,7 +46,7 @@ body {
 /* Typing animation */
 @keyframes typing {
   from { max-width: 0; }
-  to { max-width: 700px; }
+  to { max-width: min(700px, 92vw); }
 }
 @keyframes blink {
   from, to { border-color: transparent; }

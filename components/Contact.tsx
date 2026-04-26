@@ -27,7 +27,7 @@ export default function Contact({ lang }: { lang: Lang }) {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-          className="text-[clamp(2.5rem,8vw,4.5rem)] font-black tracking-[-3px] uppercase text-center mb-16"
+          className="text-[clamp(2.5rem,8vw,4.5rem)] font-black tracking-[-1px] sm:tracking-[-3px] uppercase text-center mb-16"
         >
           {isEn ? "GET_IN_TOUCH" : "聯絡與社群"}
         </motion.h2>
@@ -58,12 +58,12 @@ export default function Contact({ lang }: { lang: Lang }) {
                 whileHover={{ x: 8 }}
                 transition={{ duration: 0.5, delay: i * 0.07 }}
                 viewport={{ once: true }}
-                className="flex items-center gap-3 py-3.5 border-b border-white/5 last:border-0 group"
+                className="flex items-center gap-2 sm:gap-3 py-3.5 border-b border-white/5 last:border-0 group min-w-0"
               >
-                <span className="font-mono text-[10px] text-primary/50 w-24 shrink-0 tracking-wider">
+                <span className="font-mono text-[10px] text-primary/50 w-16 sm:w-24 shrink-0 tracking-wider">
                   [{link.label}]
                 </span>
-                <span className="font-mono text-xs text-white/40 group-hover:text-primary transition-colors duration-300 truncate">
+                <span className="font-mono text-[11px] sm:text-xs text-white/40 group-hover:text-primary transition-colors duration-300 truncate min-w-0">
                   {link.value}
                 </span>
                 <span className="ml-auto font-mono text-[10px] text-white/15 group-hover:text-primary/60 transition-colors duration-300 shrink-0">

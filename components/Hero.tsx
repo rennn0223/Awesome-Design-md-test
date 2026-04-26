@@ -55,7 +55,7 @@ export default function Hero({ lang }: { lang: Lang }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
-        className="relative z-10 flex flex-col items-center gap-8 max-w-5xl"
+        className="relative z-10 flex flex-col items-center gap-6 sm:gap-8 max-w-5xl w-full"
       >
         {/* Status line */}
         <motion.div
@@ -87,7 +87,7 @@ export default function Hero({ lang }: { lang: Lang }) {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
-            className="text-[clamp(3.5rem,13vw,9.5rem)] font-black leading-[0.85] tracking-[-4px] select-none"
+            className="text-[clamp(3rem,13vw,9.5rem)] font-black leading-[0.85] tracking-[-2px] sm:tracking-[-4px] select-none"
             style={{
               background: "linear-gradient(to bottom, #ffffff 30%, #2a2a2a 100%)",
               WebkitBackgroundClip: "text",
@@ -103,7 +103,7 @@ export default function Hero({ lang }: { lang: Lang }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.6 }}
-          className="font-mono text-xs tracking-[6px] text-white/30 uppercase"
+          className="font-mono text-[10px] tracking-[2px] sm:tracking-[5px] text-white/30 uppercase px-4 text-center"
         >
           Systems Architect · Digital Twins · Embodied AI
         </motion.div>
@@ -113,7 +113,7 @@ export default function Hero({ lang }: { lang: Lang }) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.7 }}
-          className="text-white/45 max-w-xl leading-relaxed text-base sm:text-lg"
+          className="text-white/45 max-w-xl leading-relaxed text-sm sm:text-lg px-2"
         >
           {isEn
             ? "Partnering with MSI Innovation Center. NVIDIA GTC 2026 Exhibitor. Specializing in Digital Twins & Embodied AI Infrastructure."
@@ -146,7 +146,7 @@ export default function Hero({ lang }: { lang: Lang }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.6, duration: 0.8 }}
-          className="flex flex-col items-center gap-3 mt-6"
+          className="flex flex-col items-center gap-3 mt-2 sm:mt-6"
         >
           <span className="font-mono text-[10px] text-white/15 tracking-[4px]">SCROLL</span>
           <motion.div
