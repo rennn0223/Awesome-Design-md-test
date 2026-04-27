@@ -75,7 +75,7 @@ export default function Hero({ lang }: { lang: Lang }) {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-            className="relative w-28 h-28 rounded-full overflow-hidden"
+            className="relative w-36 h-36 rounded-full overflow-hidden"
             style={{ border: "2px solid rgba(59,130,246,0.5)", boxShadow: "0 0 30px rgba(59,130,246,0.3)" }}
           >
             <img src="/assets/profile.jpg" alt="LIN SHU-JEN" className="w-full h-full object-cover" />
@@ -87,14 +87,14 @@ export default function Hero({ lang }: { lang: Lang }) {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
-            className="text-[clamp(3rem,13vw,9.5rem)] font-black leading-[0.85] tracking-[-2px] sm:tracking-[-4px] select-none"
+            className="text-[clamp(2rem,7.5vw,6.5rem)] font-black leading-none tracking-[-1px] sm:tracking-[-3px] select-none whitespace-nowrap"
             style={{
               background: "linear-gradient(to bottom, #ffffff 30%, #2a2a2a 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
           >
-            LIN,<br />SHU-JEN
+            LIN, SHU-JEN
           </motion.h1>
         </div>
 
