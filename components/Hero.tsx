@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import type { Lang } from "@/app/page";
+import { useLang } from "@/app/providers";
 
 const TAGS = ["RUST", "WASM", "OMNIVERSE", "ROS2", "LIDAR", "NVIDIA", "DGX", "USD", "JETSON", "EDGE-AI"];
 
@@ -37,7 +37,8 @@ function ParticleField() {
   );
 }
 
-export default function Hero({ lang }: { lang: Lang }) {
+export default function Hero() {
+  const { lang } = useLang();
   const isEn = lang === "en";
 
   return (
@@ -74,7 +75,7 @@ export default function Hero({ lang }: { lang: Lang }) {
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+            transition={{ delay: 0.3, duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
             className="relative w-36 h-36 rounded-full overflow-hidden"
             style={{ border: "2px solid rgba(59,130,246,0.5)", boxShadow: "0 0 30px rgba(59,130,246,0.3)" }}
           >
@@ -86,7 +87,7 @@ export default function Hero({ lang }: { lang: Lang }) {
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
+            transition={{ delay: 0.4, duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
             className="text-[clamp(2rem,7.5vw,6.5rem)] font-black leading-none tracking-[-1px] sm:tracking-[-3px] select-none whitespace-nowrap"
             style={{
               background: "linear-gradient(to bottom, #ffffff 30%, #2a2a2a 100%)",

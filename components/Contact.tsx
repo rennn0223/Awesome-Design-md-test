@@ -1,7 +1,7 @@
 "use client";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import type { Lang } from "@/app/page";
+import type { Lang } from "@/app/providers";
 
 const LINKS = [
   { label: "EMAIL", value: "ren910223@gmail.com", href: "mailto:ren910223@gmail.com" },
@@ -11,13 +11,13 @@ const LINKS = [
   { label: "BLINQ", value: "DIGITAL_BUSINESS_CARD", href: "https://s.blinq.me/cmnyeijmz02j70bs6uy3t9kdz?bs=icl" },
 ];
 
-export default function Contact({ lang }: { lang: Lang }) {
+export default function Contact({ lang, ...props }: { lang: Lang } & React.HTMLAttributes<HTMLElement>) {
   const isEn = lang === "en";
   const titleRef = useRef(null);
   const inView = useInView(titleRef, { once: true });
 
   return (
-    <section id="contact" className="py-32 px-6 relative overflow-hidden">
+    <section id="contact" {...props} className="py-32 px-6 relative overflow-hidden">
       {/* Bottom glow */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_100%,rgba(59,130,246,0.07),transparent)] pointer-events-none" />
 

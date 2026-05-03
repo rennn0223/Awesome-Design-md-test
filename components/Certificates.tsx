@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import type { Lang } from "@/app/page";
+import type { Lang } from "@/app/providers";
 
 type CertType = "link" | "preview";
 
@@ -127,13 +127,13 @@ function CertCard({ cert, lang, index, onPreview }: { cert: Cert; lang: Lang; in
   );
 }
 
-export default function Certificates({ lang }: { lang: Lang }) {
+export default function Certificates({ lang, ...props }: { lang: Lang } & React.HTMLAttributes<HTMLElement>) {
   const [preview, setPreview] = useState<string | null>(null);
   const titleRef = useRef(null);
   const inView = useInView(titleRef, { once: true });
 
   return (
-    <section id="certificates" className="py-32 px-6 relative">
+    <section id="certificates" {...props} className="py-32 px-6 relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_50%,rgba(59,130,246,0.03),transparent)] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto relative z-10">

@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useInView } from "framer-motion";
-import type { Lang } from "@/app/page";
+import type { Lang } from "@/app/providers";
 
 const PROJECTS = [
   {
@@ -153,12 +153,12 @@ function TiltCard({
   );
 }
 
-export default function Projects({ lang }: { lang: Lang }) {
+export default function Projects({ lang, ...props }: { lang: Lang } & React.HTMLAttributes<HTMLElement>) {
   const titleRef = useRef(null);
   const inView = useInView(titleRef, { once: true });
 
   return (
-    <section id="projects" className="py-32 px-6 relative">
+    <section id="projects" {...props} className="py-32 px-6 relative">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(59,130,246,0.04),transparent)] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto">

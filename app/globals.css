@@ -19,7 +19,7 @@ body {
   cursor: none;
 }
 
-@media (pointer: coarse) {
+@media (hover: none) and (pointer: coarse) {
   body { cursor: auto; }
 }
 
@@ -59,6 +59,35 @@ body {
   border-right: 2px solid #10b981;
   max-width: 0;
   animation: typing 2.5s steps(45, end) 0.8s forwards, blink 0.75s step-end infinite;
+}
+
+/* Page watermark */
+.watermark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
+}
+.watermark span {
+  font-size: 20vw;
+  font-weight: 900;
+  color: rgba(255,255,255,0.015);
+  white-space: nowrap;
+  line-height: 0;
+  letter-spacing: -0.05em;
+}
+
+/* Page transition */
+.page-enter {
+  animation: fadeIn 0.4s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* Scanline overlay */

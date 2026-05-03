@@ -1,7 +1,7 @@
 "use client";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import type { Lang } from "@/app/page";
+import type { Lang } from "@/app/providers";
 
 const EVENTS = [
   {
@@ -135,12 +135,12 @@ function TimelineEvent({
   );
 }
 
-export default function Timeline({ lang }: { lang: Lang }) {
+export default function Timeline({ lang, ...props }: { lang: Lang } & React.HTMLAttributes<HTMLElement>) {
   const titleRef = useRef(null);
   const inView = useInView(titleRef, { once: true });
 
   return (
-    <section id="timeline" className="py-32 px-6 relative overflow-hidden">
+    <section id="timeline" {...props} className="py-32 px-6 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_100%_50%,rgba(59,130,246,0.04),transparent)] pointer-events-none" />
       <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
 
