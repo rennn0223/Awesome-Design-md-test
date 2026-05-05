@@ -7,6 +7,21 @@ import Cursor from "@/components/Cursor";
 
 const PROJECTS = [
   {
+    image: "/assets/GTC2026.jpeg",
+    tags: ["GTC2026", "ATTENDEE"],
+    en: {
+      title: "GTC 2026 Conference",
+      desc: "Attended NVIDIA GTC 2026 conference. Features keynote presentations and technical sessions.",
+      more: "Attended NVIDIA GTC 2026 conference, experiencing the latest breakthroughs in AI, accelerated computing, and Omniverse. Networked with industry leaders and fellow developers. Poster and full documentation available for review.",
+    },
+    zh: {
+      title: "GTC 2026 大會參會記錄",
+      desc: "參加 NVIDIA GTC 2026 大會，記錄關鍵主題演講與技術研討會。",
+      more: "親身參與 NVIDIA GTC 2026 大會，體驗 AI 與加速運算的最新突破，以及 Omniverse 的發展。與產業領袖及開發者交流，收穫豐碩。海報與完整文件可點擊查看。",
+    },
+    pdf: "/assets/gtc2026.pdf",
+  },
+  {
     image: "/assets/signiture.jpeg",
     tags: ["NVIDIA_GTC", "SIGNATURE"],
     en: { title: "GTC 2026: Ackermann DT", desc: "Exhibited at DGX Spark. Features real-time Alpamayo sync logic.", more: "Lead Architect for the Campus Inspection System. Developed a real-time Digital Twin environment for autonomous monitoring using Omniverse. Collaborated with MSI to deploy on DGX Spark, ensuring sub-millisecond synchronization. Personally recognized by CEO Jensen Huang." },
@@ -111,6 +126,17 @@ function TiltCard({
             </div>
           </motion.div>
 
+          {project.pdf && (
+            <a
+              href={project.pdf}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="mt-auto self-start font-mono text-[11px] text-primary border border-primary/30 px-4 py-2 rounded-full hover:bg-primary/10 hover:border-primary/60 transition-all duration-300"
+            >
+              {lang === "en" ? "VIEW_PDF_" : "查看PDF_"}
+            </a>
+          )}
           <button
             onClick={(e) => { e.stopPropagation(); setExpanded(!expanded); }}
             className="mt-auto self-start font-mono text-[11px] text-primary border border-primary/30 px-4 py-2 rounded-full hover:bg-primary/10 hover:border-primary/60 transition-all duration-300"
