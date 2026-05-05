@@ -77,7 +77,7 @@ const CERTS: Cert[] = [
     title: "DJI Drone Professional Training",
     en: "Certified operational proficiency for commercial UAV deployment.",
     zh: "大疆專業無人機操作培訓，具備商用無人機部署與操作能力。",
-    image: "/assets/dji_cert.jpg",
+    image: "/assets/dji_cert.pdf",
     btnEn: "[ ] PREVIEW_DOCUMENT",
     btnZh: "[ ] 預覽授權文件",
     type: "preview",
@@ -237,12 +237,21 @@ export default function CertificatesPage() {
                 >
                   ×
                 </button>
-                <img
-                  src={preview}
-                  alt="Certificate preview"
-                  className="w-full rounded-xl"
-                  style={{ border: "2px solid rgba(59,130,246,0.4)", boxShadow: "0 0 50px rgba(59,130,246,0.25)" }}
-                />
+                {preview.endsWith(".pdf") ? (
+                  <embed
+                    src={preview}
+                    type="application/pdf"
+                    className="w-full rounded-xl"
+                    style={{ height: "70vh", border: "2px solid rgba(59,130,246,0.4)", boxShadow: "0 0 50px rgba(59,130,246,0.25)" }}
+                  />
+                ) : (
+                  <img
+                    src={preview}
+                    alt="Certificate preview"
+                    className="w-full rounded-xl"
+                    style={{ border: "2px solid rgba(59,130,246,0.4)", boxShadow: "0 0 50px rgba(59,130,246,0.25)" }}
+                  />
+                )}
               </motion.div>
             </motion.div>
           )}
