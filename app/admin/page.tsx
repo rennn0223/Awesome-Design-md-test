@@ -6,8 +6,7 @@ import DataEditor from "@/components/admin/DataEditor";
 type Page = "login" | "files" | "edit";
 
 export default function AdminPage() {
-  const [page, setPage] = useState<Page>("login");
-  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState<Page>("loading");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [files, setFiles] = useState<{ name: string; path: string }[]>([]);
@@ -16,89 +15,114 @@ export default function AdminPage() {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: "ok" | "err" } | null>(null);
 
-  // Check auth on mount
   useEffect(() => {
-    fetch("/admin/api/auth").then((r) => {
-      setLoading(r.ok ? false : true);
-      if (r.ok) setPage("files");
-      else setPage("login");
-    });
+    let cancelled = false;
+
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("/admin/api/auth");
+        if (cancelled) return;
+        if (res.ok) {
+          setPage("files");
+        } else {
+          setPage("login");
+        }
+      } catch {
+        if (cancelled) return;
+        setPage("login");
+      }
+    };
+
+    checkAuth();
+    return () => { cancelled = true; };
   }, []);
 
-  // Show toast
   const showToast = useCallback((msg: string, type: "ok" | "err" = "ok") => {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3000);
   }, []);
 
-  // Login
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch("/admin/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
-    if (res.ok) {
-      setPage("files");
-      setPassword("");
-      setErrorMsg("");
-    } else {
-      setErrorMsg("密碼錯誤");
+    try {
+      const res = await fetch("/admin/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      if (res.ok) {
+        setPage("files");
+        setPassword("");
+        setErrorMsg("");
+      } else {
+        setErrorMsg("密碼錯誤");
+      }
+    } catch {
+      setErrorMsg("連線失敗，請重試");
     }
   };
 
-  // Logout
   const handleLogout = async () => {
     await fetch("/admin/api/login", { method: "DELETE" });
     setPage("login");
     setCurrentFile(null);
   };
 
-  // Load file list
   const loadFiles = async () => {
-    const res = await fetch("/admin/api/data/files");
-    if (res.ok) {
-      const data = await res.json();
-      setFiles(data);
+    try {
+      const res = await fetch("/admin/api/data/files");
+      if (res.ok) {
+        const data = await res.json();
+        setFiles(data);
+      }
+    } catch {
+      showToast("無法讀取檔案列表", "err");
     }
   };
 
-  // Load file content
   const loadFile = async (path: string) => {
-    const res = await fetch(`/admin/api/data/file?path=${encodeURIComponent(path)}`);
-    if (res.ok) {
-      const text = await res.text();
-      setFileContent(text);
-      setCurrentFile(path);
-      setPage("edit");
+    try {
+      const res = await fetch(`/admin/api/data/file?path=${encodeURIComponent(path)}`);
+      if (res.ok) {
+        const text = await res.text();
+        setFileContent(text);
+        setCurrentFile(path);
+        setPage("edit");
+      } else {
+        showToast("無法讀取檔案", "err");
+      }
+    } catch {
+      showToast("無法讀取檔案", "err");
     }
   };
 
-  // Save file
   const handleSave = async () => {
     if (!currentFile) return;
     setSaving(true);
-    const res = await fetch("/admin/api/data/file", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        path: currentFile,
-        content: fileContent,
-        message: `Update ${currentFile} via CMS`,
-      }),
-    });
-    setSaving(false);
-    if (res.ok) {
-      showToast("已儲存並推送到 GitHub");
-      await loadFiles();
-    } else {
-      const err = await res.json();
-      showToast(err.error || "儲存失敗", "err");
+    try {
+      const res = await fetch("/admin/api/data/file", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          path: currentFile,
+          content: fileContent,
+          message: `Update ${currentFile} via CMS`,
+        }),
+      });
+      if (res.ok) {
+        showToast("已儲存並推送到 GitHub");
+        await loadFiles();
+      } else {
+        const err = await res.json();
+        showToast(err.error || "儲存失敗", "err");
+      }
+    } catch {
+      showToast("儲存失敗", "err");
+    } finally {
+      setSaving(false);
     }
   };
 
-  // Create new file
   const handleCreate = (name: string) => {
     const path = `data/${name}`;
     setCurrentFile(path);
@@ -106,27 +130,27 @@ export default function AdminPage() {
     setPage("edit");
   };
 
-  // Delete file
   const handleDelete = async (path: string) => {
     if (!confirm(`確定要刪除 ${path}？`)) return;
-    const res = await fetch(`/admin/api/data/file?path=${encodeURIComponent(path)}`, {
-      method: "DELETE",
-    });
-    if (res.ok) {
-      showToast("已刪除");
-      await loadFiles();
-    } else {
+    try {
+      const res = await fetch(`/admin/api/data/file?path=${encodeURIComponent(path)}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        showToast("已刪除");
+        await loadFiles();
+      } else {
+        showToast("刪除失敗", "err");
+      }
+    } catch {
       showToast("刪除失敗", "err");
     }
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-black">載入中...</div>;
-  if (page === "login") return <LoginPage password={password} setPassword={setPassword} errorMsg={errorMsg} onLogin={handleLogin} />;
-
-  return (
-    <div className="min-h-screen bg-black text-on-dark flex">
-      {/* Toast */}
-      {toast && (
+  // Toast
+  if (toast) {
+    return (
+      <div className="min-h-screen bg-black">
         <div className="fixed top-4 right-4 z-50">
           <div
             className={`px-4 py-3 rounded-sm text-body-sm ${
@@ -136,24 +160,32 @@ export default function AdminPage() {
             {toast.msg}
           </div>
         </div>
-      )}
+        <LoginPage password={password} setPassword={setPassword} errorMsg={errorMsg} onLogin={handleLogin} />
+      </div>
+    );
+  }
 
-      {/* Sidebar */}
+  // Login page
+  if (page === "login") return <LoginPage password={password} setPassword={setPassword} errorMsg={errorMsg} onLogin={handleLogin} />;
+
+  // Loading state
+  if (page === "loading") return <div className="min-h-screen bg-black flex items-center justify-center">載入中...</div>;
+
+  // Main CMS
+  return (
+    <div className="min-h-screen bg-black text-on-dark flex">
       <Sidebar
         files={files}
         currentFile={currentFile}
         saving={saving}
-        onSelectFile={(f) => {
-          loadFile(f.path);
-        }}
+        onSave={handleSave}
+        onSelectFile={(f) => loadFile(f.path)}
         onCreateFile={handleCreate}
         onDeleteFile={handleDelete}
-        onSave={handleSave}
         onLogout={handleLogout}
-        onRefresh={() => loadFiles()}
+        onRefresh={loadFiles}
       />
 
-      {/* Editor */}
       {page === "edit" && currentFile && (
         <DataEditor
           file={currentFile}
