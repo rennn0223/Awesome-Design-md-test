@@ -54,7 +54,7 @@ export async function writeDataFile(
       },
       body: JSON.stringify({
         message: commitMessage,
-        content: btoa(content),
+        content: Buffer.from(content, 'utf-8').toString('base64'),
         ...(isCreate ? {} : { sha }),
         branch: BRANCH,
       }),

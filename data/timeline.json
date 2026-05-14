@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026.05.14",
+    "en": {
+      "title": "Semantic Control of Autonomous Vehicle Agent via NemoClaw & ROS2 — Digital Twin Architecture",
+      "desc": "Built a natural language-driven semantic control pipeline using NVIDIA NemoClaw and ROS2 for an autonomous vehicle agent. The system translates natural language instructions into ROS2 control commands, enabling intuitive operation of a digital twin in Isaac Sim."
+    },
+    "zh": {
+      "title": "透過 NVIDIA NemoClaw 與 ROS2 構建之無人載具 Agent 語意控制與數位孿生架構",
+      "desc": "使用 NVIDIA NemoClaw 將自然語言輸入轉換為 ROS2 控制指令，並成功實現與 Isaac Sim 數位孿生的即時對接。透過語意控制層讓無人載具的操控更直觀、更彈性。"
+    }
+  },
+  {
     "date": "2026.03.30 — PRESENT",
     "en": {
       "title": "MGX Infrastructure & NemoClaw Deployment",
