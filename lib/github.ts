@@ -1,8 +1,15 @@
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN!;
-const REPO = process.env.GITHUB_REPO!;
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const REPO = process.env.GITHUB_REPO;
 const BRANCH = process.env.GITHUB_BRANCH || "main";
 
+function checkEnv() {
+  if (!GITHUB_TOKEN || !REPO) {
+    throw new Error("GITHUB_TOKEN or GITHUB_REPO not configured");
+  }
+}
+
 async function getFileContent(filePath: string): Promise<string | null> {
+  checkEnv();
   const res = await fetch(
     `https://api.github.com/repos/${REPO}/contents/${filePath}?ref=${BRANCH}`,
     { headers: { Authorization: `Bearer ${GITHUB_TOKEN}` } }
@@ -13,6 +20,7 @@ async function getFileContent(filePath: string): Promise<string | null> {
 }
 
 export async function getFilePathSha(filePath: string): Promise<string | null> {
+  checkEnv();
   const res = await fetch(
     `https://api.github.com/repos/${REPO}/contents/${filePath}?ref=${BRANCH}`,
     { headers: { Authorization: `Bearer ${GITHUB_TOKEN}` } }
@@ -23,6 +31,7 @@ export async function getFilePathSha(filePath: string): Promise<string | null> {
 }
 
 export async function readDataFile(filePath: string): Promise<string | null> {
+  checkEnv();
   return getFileContent(filePath);
 }
 
@@ -31,6 +40,7 @@ export async function writeDataFile(
   content: string,
   commitMessage: string
 ): Promise<{ ok: boolean; error?: string }> {
+  checkEnv();
   const sha = await getFilePathSha(filePath);
   const isCreate = !sha;
 
@@ -61,6 +71,7 @@ export async function writeDataFile(
 export async function listDataFiles(): Promise<
   { name: string; path: string; type: "file" | "dir" }[]
 > {
+  checkEnv();
   const res = await fetch(
     `https://api.github.com/repos/${REPO}/contents/data?ref=${BRANCH}`,
     { headers: { Authorization: `Bearer ${GITHUB_TOKEN}` } }
