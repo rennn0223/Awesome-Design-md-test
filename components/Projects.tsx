@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform, useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import type { Lang } from "@/app/providers";
 
 const PROJECTS = [
@@ -55,7 +55,7 @@ const PROJECTS = [
   },
 ];
 
-function TiltCard({
+function ProjectCard({
   project,
   lang,
   index,
@@ -64,109 +64,81 @@ function TiltCard({
   lang: Lang;
   index: number;
 }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef(null);
-  const [expanded, setExpanded] = useState(false);
-  const inView = useInView(containerRef, { once: true, margin: "-80px" });
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
   const content = lang === "en" ? project.en : project.zh;
-
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 180, damping: 22 });
-  const sy = useSpring(y, { stiffness: 180, damping: 22 });
-  const rotateX = useTransform(sy, [-0.5, 0.5], [7, -7]);
-  const rotateY = useTransform(sx, [-0.5, 0.5], [-7, 7]);
-  const glowX = useTransform(sx, [-0.5, 0.5], ["0%", "100%"]);
-  const glowY = useTransform(sy, [-0.5, 0.5], ["0%", "100%"]);
-
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const r = cardRef.current.getBoundingClientRect();
-    x.set((e.clientX - r.left) / r.width - 0.5);
-    y.set((e.clientY - r.top) / r.height - 0.5);
-  };
-  const onLeave = () => { x.set(0); y.set(0); };
+  const [detailsOpen, setDetailsOpen] = useState(false);
 
   return (
     <motion.div
-      ref={containerRef}
-      initial={{ opacity: 0, y: 60 }}
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.75, delay: index * 0.15, ease: [0.2, 0.8, 0.2, 1] }}
-      style={{ perspective: 1200 }}
+      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.2, 0.8, 0.2, 1] }}
+      className="relative"
     >
-      <motion.div
-        ref={cardRef}
-        onMouseMove={onMove}
-        onMouseLeave={onLeave}
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="glass rounded-2xl overflow-hidden flex flex-col h-full group"
-      >
-        {/* Spotlight glow on hover */}
-        <motion.div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300 rounded-2xl z-10"
-          style={{
-            background: `radial-gradient(circle at ${glowX} ${glowY}, rgba(59,130,246,0.08) 0%, transparent 60%)`,
-          }}
-        />
+      {/* Card container - using feature-card or product-card based on content */}
+      <div className="bg-canvas text-ink border border-hairline rounded-sm flex flex-col min-h-96 feature-card">
+        {/* Corner square accent */}
+        <div className="absolute -top-1 -left-1 w-3 h-3 bg-primary" />
 
-        {/* Image */}
-        <div className="relative overflow-hidden h-56 shrink-0">
+        {/* Image section */}
+        <div className="relative h-48 overflow-hidden">
           <img
             src={project.image}
             alt={content.title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-[#030303]/20 to-transparent" />
-          <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+          {/* Tags */}
+          <div className="absolute top-3 left-3 flex flex-wrap gap-2">
             {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className="font-mono text-[10px] text-primary border border-primary/30 bg-primary/10 backdrop-blur-sm px-2 py-0.5 rounded"
-              >
+              <span key={tag} className="badge-tag">
                 {tag}
               </span>
             ))}
           </div>
         </div>
 
-        {/* Content */}
-        <div className="p-6 flex flex-col gap-4 flex-1 relative z-20">
-          <h3 className="text-xl font-black text-white leading-tight">{content.title}</h3>
-          <p className="text-white/45 text-sm leading-relaxed">{content.desc}</p>
+        {/* Content section */}
+        <div className="flex-1 p-6 flex flex-col min-h-0">
+          <h3 className="text-heading-md text-ink mb-2">{content.title}</h3>
+          <p className="text-body-md text-ink mb-4">{content.desc}</p>
 
-          <motion.div
-            animate={{ height: expanded ? "auto" : 0, opacity: expanded ? 1 : 0 }}
-            initial={false}
-            transition={{ duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
-            className="overflow-hidden"
-          >
-            <div className="pt-4 border-t border-white/8 text-white/55 text-sm leading-relaxed">
+          {/* Button section */}
+          <div className="mt-auto flex flex-wrap gap-2">
+            {project.pdf && (
+              <a
+                href={project.pdf}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="button-outline"
+              >
+                {lang === "en" ? "VIEW PDF" : "查看 PDF"}
+              </a>
+            )}
+            <button
+              type="button"
+              className={detailsOpen ? "button-primary-active" : "button-primary"}
+              onClick={() => setDetailsOpen((o) => !o)}
+              aria-expanded={detailsOpen}
+            >
+              {detailsOpen
+                ? lang === "en"
+                  ? "HIDE DETAILS"
+                  : "收合詳情"
+                : lang === "en"
+                  ? "VIEW DETAILS"
+                  : "查看詳情"}
+            </button>
+          </div>
+
+          {detailsOpen && (
+            <div className="mt-4 pt-4 border-t border-hairline text-body-md text-ink leading-relaxed">
               {content.more}
             </div>
-          </motion.div>
-
-          {project.pdf && (
-            <a
-              href={project.pdf}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="mt-auto self-start font-mono text-[11px] text-primary border border-primary/30 px-4 py-2 rounded-full hover:bg-primary/10 hover:border-primary/60 transition-all duration-300"
-            >
-              {lang === "en" ? "VIEW_PDF_" : "查看PDF_"}
-            </a>
           )}
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="mt-auto self-start font-mono text-[11px] text-primary border border-primary/30 px-4 py-2 rounded-full hover:bg-primary/10 hover:border-primary/60 transition-all duration-300"
-          >
-            {expanded
-              ? lang === "en" ? "COLLAPSE_" : "收合內容_"
-              : lang === "en" ? "VIEW_MORE_" : "查看更多_"}
-          </button>
         </div>
-      </motion.div>
+      </div>
     </motion.div>
   );
 }
@@ -176,24 +148,27 @@ export default function Projects({ lang, ...props }: { lang: Lang } & React.HTML
   const inView = useInView(titleRef, { once: true });
 
   return (
-    <section id="projects" {...props} className="py-32 px-6 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(59,130,246,0.04),transparent)] pointer-events-none" />
+    <section id="projects" {...props} className="relative">
+      {/* Section padding */}
+      <div className="pt-[64px] pb-[64px] px-6">
+        <div className="max-w-6xl mx-auto">
+          {/* Section title */}
+          <motion.h2
+            ref={titleRef}
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+            className="text-display-lg text-on-dark text-center mb-8"
+          >
+            {lang === "en" ? "TECHNICAL PROJECTS" : "技術專案實錄"}
+          </motion.h2>
 
-      <div className="max-w-6xl mx-auto">
-        <motion.h2
-          ref={titleRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-          className="text-[clamp(2.5rem,8vw,4.5rem)] font-black tracking-[-1px] sm:tracking-[-3px] uppercase text-center mb-20"
-        >
-          {lang === "en" ? "MISSION_GALLERY" : "技術專案實錄"}
-        </motion.h2>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {PROJECTS.map((p, i) => (
-            <TiltCard key={i} project={p} lang={lang} index={i} />
-          ))}
+          {/* Projects grid */}
+          <div className="grid gap-6 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+            {PROJECTS.map((p, i) => (
+              <ProjectCard key={i} project={p} lang={lang} index={i} />
+            ))}
+          </div>
         </div>
       </div>
     </section>

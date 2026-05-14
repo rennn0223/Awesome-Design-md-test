@@ -113,24 +113,21 @@ function TimelineEvent({
       initial={{ opacity: 0, x: -30 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.07, ease: [0.2, 0.8, 0.2, 1] }}
-      className="relative pl-10 pb-12 border-l border-primary/15 last:border-transparent"
+      className="relative pl-4 pb-6 border-l border-hairline last:border-transparent"
     >
       {/* Dot */}
       <div
-        className="absolute -left-[9px] top-1.5 w-[18px] h-[18px] rounded-full bg-bg border-2 border-primary"
-        style={{ boxShadow: "0 0 14px rgba(59,130,246,0.6)" }}
-      >
-        <div className="absolute inset-[3px] rounded-full bg-primary" />
-      </div>
+        className="absolute left-[-6px] top-0.5 w-2 h-2 rounded-full bg-primary border border-hairline"
+      />
 
       {/* Date */}
-      <div className="font-mono text-primary text-xs font-bold mb-2 tracking-wider">{event.date}</div>
+      <div className="font-mono text-primary-dark text-xs mb-2">{event.date}</div>
 
       {/* Title */}
-      <h3 className="text-base font-black text-white mb-2 leading-snug">{content.title}</h3>
+      <h3 className="text-heading-md text-ink mb-2">{content.title}</h3>
 
       {/* Desc */}
-      <p className="text-white/40 text-sm leading-relaxed">{content.desc}</p>
+      <p className="text-body-md text-ink leading-relaxed">{content.desc}</p>
     </motion.div>
   );
 }
@@ -140,25 +137,33 @@ export default function Timeline({ lang, ...props }: { lang: Lang } & React.HTML
   const inView = useInView(titleRef, { once: true });
 
   return (
-    <section id="timeline" {...props} className="py-32 px-6 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_100%_50%,rgba(59,130,246,0.04),transparent)] pointer-events-none" />
-      <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
+    <section id="timeline" {...props} className="relative">
+      {/* Section padding */}
+      <div className="pt-[64px] pb-[64px] px-6">
+        <div className="max-w-3xl mx-auto">
+          {/* Section title */}
+          <motion.h2
+            ref={titleRef}
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+            className="text-display-lg text-on-dark text-center mb-8"
+          >
+            {lang === "en" ? "EXPERIENCE TIMELINE" : "經歷時間軸"}
+          </motion.h2>
 
-      <div className="max-w-3xl mx-auto relative z-10">
-        <motion.h2
-          ref={titleRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-          className="text-[clamp(2.5rem,8vw,4.5rem)] font-black tracking-[-1px] sm:tracking-[-3px] uppercase text-center mb-20"
-        >
-          {lang === "en" ? "SYSTEM_TIMELINE" : "精確任務時間軸"}
-        </motion.h2>
+          {/* Timeline content */}
+          <div className="relative pl-4">
+            {/* Left border */}
+            <div className="absolute left-0 top-0 bottom-0 w-px bg-hairline" />
 
-        <div className="ml-2">
-          {EVENTS.map((e, i) => (
-            <TimelineEvent key={i} event={e} lang={lang} index={i} />
-          ))}
+            {/* Events */}
+            <div className="ml-4">
+              {EVENTS.map((e, i) => (
+                <TimelineEvent key={i} event={e} lang={lang} index={i} />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -33,8 +33,8 @@ export default function Cursor() {
           y: ry,
           translateX: "-50%",
           translateY: "-50%",
-          border: "1px solid rgba(59,130,246,0.5)",
-          boxShadow: "0 0 16px rgba(59,130,246,0.25)",
+          border: "1px solid rgba(118,185,0,0.5)",
+          boxShadow: "0 0 16px rgba(118,185,0,0.25)",
         }}
       />
     </>

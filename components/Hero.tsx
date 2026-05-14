@@ -1,38 +1,97 @@
 "use client";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
+import Link from "next/link";
 import { useLang } from "@/app/providers";
 
-const TAGS = ["RUST", "WASM", "OMNIVERSE", "ROS2", "LIDAR", "NVIDIA", "DGX", "USD", "JETSON", "EDGE-AI"];
+/* -- Animated particle grid background -- */
+function ParticleGrid() {
+  const count = 60;
+  const particles = Array.from({ length: count }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    delay: Math.random() * 8,
+    duration: 4 + Math.random() * 6,
+    size: 1 + Math.random() * 2,
+  }));
 
-type Particle = { x: number; y: number; size: number; duration: number; delay: number };
+  return (
+    <div className="absolute inset-0 overflow-hidden" aria-hidden>
+      {/* Subtle grid pattern */}
+      <svg className="absolute inset-0 w-full h-full opacity-[0.03]" aria-hidden>
+        <defs>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="0.5" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)" />
+      </svg>
 
-function ParticleField() {
-  const [particles, setParticles] = useState<Particle[]>([]);
+      {/* Floating particles */}
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full bg-primary"
+          style={{
+            width: p.size,
+            height: p.size,
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            opacity: 0.15,
+          }}
+          animate={{
+            y: [0, -30, 0],
+            x: [0, Math.sin(p.id) * 15, 0],
+            opacity: [0.1, 0.25, 0.1],
+          }}
+          transition={{
+            duration: p.duration,
+            repeat: Infinity,
+            delay: p.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/* -- Live clock / timestamp -- */
+function SystemClock() {
+  const [time, setTime] = useState("");
+  const [date, setDate] = useState("");
 
   useEffect(() => {
-    setParticles(
-      Array.from({ length: 40 }, () => ({
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: Math.random() * 2.5 + 0.5,
-        duration: 5 + Math.random() * 6,
-        delay: Math.random() * 6,
-      }))
-    );
+    const tick = () => {
+      const now = new Date();
+      setTime(
+        now.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+          timeZoneName: "short",
+        })
+      );
+      setDate(
+        now.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        })
+      );
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
   }, []);
 
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {particles.map((p, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full bg-primary"
-          style={{ left: `${p.x}%`, top: `${p.y}%`, width: p.size, height: p.size, opacity: 0.15 }}
-          animate={{ y: [0, -40, 0], opacity: [0.1, 0.5, 0.1] }}
-          transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: "easeInOut" }}
-        />
-      ))}
+    <div className="font-mono text-xs text-on-dark-mute tracking-wider flex flex-col sm:flex-row gap-1 sm:gap-4">
+      <span>{date}</span>
+      <span className="text-primary/40">/</span>
+      <span className="text-primary">{time}</span>
     </div>
   );
 }
@@ -40,123 +99,202 @@ function ParticleField() {
 export default function Hero() {
   const { lang } = useLang();
   const isEn = lang === "en";
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springX = useSpring(mouseX, { stiffness: 80, damping: 20 });
+  const springY = useSpring(mouseY, { stiffness: 80, damping: 20 });
+
+  useEffect(() => {
+    const move = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, [mouseX, mouseY]);
 
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 grid-bg scanlines overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden"
     >
-      {/* Radial glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_0%,rgba(59,130,246,0.09),transparent)] pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_40%_at_50%_50%,rgba(59,130,246,0.04),transparent)] pointer-events-none" />
+      {/* -- Black canvas (hero-card-dark spec) -- */}
+      <div className="absolute inset-0 bg-surface-dark" />
 
-      <ParticleField />
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        className="relative z-10 flex flex-col items-center gap-6 sm:gap-8 max-w-5xl w-full"
-      >
-        {/* Status line */}
+      {/* -- Gradient mesh overlay -- */}
+      <div className="absolute inset-0" aria-hidden>
+        {/* Radial glow following cursor */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          className="font-mono text-accent text-xs sm:text-sm"
-        >
-          <span className="typing-text">
-            {isEn ? "> INITIALIZING_SYSTEMS_ARCHITECT_CORE_v2.6.0" : "> 系統架構師核心已載入_v2.6.0"}
-          </span>
-        </motion.div>
+          className="absolute w-[600px] h-[600px] rounded-full opacity-[0.04]"
+          style={{
+            background: "radial-gradient(circle, #76b900 0%, transparent 70%)",
+            x: springX,
+            y: springY,
+            translateX: "-50%",
+            translateY: "-50%",
+            left: 0,
+            top: 0,
+          }}
+        />
+        {/* Subtle corner accents */}
+        <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-gradient-to-bl from-primary/[0.03] to-transparent" />
+        <div className="absolute bottom-0 left-0 w-[60vw] h-[40vh] bg-gradient-to-tr from-primary/[0.02] to-transparent" />
+      </div>
 
-        {/* Avatar + Name row */}
-        <div className="flex flex-col items-center gap-6">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-            className="relative w-36 h-36 rounded-full overflow-hidden"
-            style={{ border: "2px solid rgba(59,130,246,0.5)", boxShadow: "0 0 30px rgba(59,130,246,0.3)" }}
-          >
-            <img src="/assets/profile.jpg" alt="LIN SHU-JEN" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent" />
-          </motion.div>
+      {/* -- Particles -- */}
+      <ParticleGrid />
 
-          {/* Giant title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
-            className="text-[clamp(2rem,7.5vw,6.5rem)] font-black leading-none tracking-[-1px] sm:tracking-[-3px] select-none whitespace-nowrap"
-            style={{
-              background: "linear-gradient(to bottom, #ffffff 30%, #2a2a2a 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            LIN, SHU-JEN
-          </motion.h1>
-        </div>
-
-        {/* Title badge */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-          className="font-mono text-[10px] tracking-[2px] sm:tracking-[5px] text-white/30 uppercase px-4 text-center"
-        >
-          Systems Architect · Digital Twins · Embodied AI
-        </motion.div>
-
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.7 }}
-          className="text-white/45 max-w-xl leading-relaxed text-sm sm:text-lg px-2"
-        >
-          {isEn
-            ? "Partnering with MSI Innovation Center. NVIDIA GTC 2026 Exhibitor. Specializing in Digital Twins & Embodied AI Infrastructure."
-            : "微星科技創新前瞻中心夥伴。NVIDIA GTC 2026 參展人。專注於數位孿生、具身智能與高效能系統架構。"}
-        </motion.p>
-
-        {/* Tech tags */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.9, duration: 0.6 }}
-          className="flex flex-wrap gap-2 justify-center"
-        >
-          {TAGS.map((tag, i) => (
-            <motion.span
-              key={tag}
-              initial={{ opacity: 0, scale: 0.7 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.9 + i * 0.04 }}
-              whileHover={{ borderColor: "rgba(59,130,246,0.6)", color: "#3b82f6", scale: 1.05 }}
-              className="font-mono text-[10px] border border-white/10 px-3 py-1 rounded-full text-white/35 transition-all duration-300 cursor-default"
+      {/* -- Content (per hero-card-dark: 80px vert / 48px horiz padding) -- */}
+      <div ref={ref} className="relative z-10 max-w-content mx-auto px-6 sm:px-8 lg:px-12 w-full" style={{ paddingTop: "80px", paddingBottom: "200px" }}>
+        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-12 lg:gap-16">
+          {/* Left: copy area */}
+          <div className="flex-1 pt-16 lg:pt-20">
+            {/* Status line */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ delay: 0.1, duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+              className="flex items-center gap-3 mb-6"
             >
-              {tag}
-            </motion.span>
-          ))}
-        </motion.div>
+              <span className="w-3 h-3 bg-primary flex-shrink-0" />
+              <span className="font-mono text-[13px] text-primary uppercase whitespace-nowrap">
+                {isEn ? "SYSTEMS_ARCHITECT_CORE" : "系統架構師核心"}
+              </span>
+              <span className="hidden sm:inline text-xs text-primary/30">v2.6.0</span>
+            </motion.div>
+
+            {/* Name — display-xl per spec */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.2, duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+              className="text-on-dark mb-1 tracking-tight"
+              style={{ fontSize: "48px", fontWeight: 700, lineHeight: 1.25 }}
+            >
+              LIN, SHU-JEN
+            </motion.h1>
+
+            {/* Title — caption-md eyebrow + display-lg */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.35, duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+              className="mb-6"
+            >
+              <span className="text-[14px] font-bold text-primary/60 block mb-1">{isEn ? "ROLE" : "職稱"}</span>
+              <span className="text-[16px] font-bold text-on-dark" style={{ lineHeight: "1.5" }}>
+                {isEn
+                  ? "Systems Architect · Digital Twins · Embodied AI"
+                  : "系統架構師 · 數位孿生 · 具身智能"}
+              </span>
+            </motion.div>
+
+            {/* Description — heading-lg per spec */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.5, duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+              className="text-[15px] font-normal text-on-dark-mute max-w-xl mb-8 leading-relaxed"
+            >
+              {isEn
+                ? "Partnering with MSI Innovation Center. NVIDIA GTC 2026 Exhibitor. Specializing in Digital Twins & Embodied AI Infrastructure — building the bridge between physical systems and their virtual representations."
+                : "微星科技創新前瞻中心夥伴。NVIDIA GTC 2026 參展人。專注於數位孿生與具身智能基礎設施——構築實體系統與虛擬表征之間的橋樑。"}
+            </motion.p>
+
+            {/* CTA buttons — button-primary + button-outline-on-dark per spec */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.65, duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+              className="flex flex-wrap gap-3 mb-10"
+            >
+              <Link href="/projects">
+                <button className="button-primary text-button-md">{isEn ? "EXPLORE WORK" : "探索作品"}</button>
+              </Link>
+              <Link href="/contact">
+                <button className="button-outline-on-dark text-button-md">{isEn ? "GET IN TOUCH" : "聯繫我"}</button>
+              </Link>
+            </motion.div>
+
+            {/* Stats callouts — blend into dark background */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.85, duration: 0.6 }}
+              className="flex flex-wrap gap-x-10 gap-y-6"
+            >
+              {[
+                { value: "10+", labelEn: "Projects Delivered", labelZh: "完成專案" },
+                { value: "3", labelEn: "NVIDIA Certifications", labelZh: "NVIDIA 認證" },
+                { value: "DGX", labelEn: "Spark Deployed", labelZh: "DGX Spark 部署" },
+              ].map((stat, i) => (
+                <div key={i} className="min-w-0">
+                  <div className="text-[36px] font-bold text-primary leading-none">{stat.value}</div>
+                  <div className="text-[12px] font-normal text-[rgba(255,255,255,0.5)] mt-1 tracking-wide">{isEn ? stat.labelEn : stat.labelZh}</div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Right: Avatar / visual element */}
+          <motion.div
+            ref={ref}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ delay: 0.5, duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
+            className="hidden lg:flex flex-col items-center gap-6 shrink-0"
+          >
+            {/* Avatar ring */}
+            <div className="relative">
+              {/* Outer ring animation */}
+              <motion.div
+                className="absolute inset-0 rounded-full border border-primary/20"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              />
+              <div className="relative w-48 h-48 rounded-full border-2 border-on-dark/20 overflow-hidden">
+                <img
+                  src="/assets/profile.jpg"
+                  alt="LIN SHU-JEN"
+                  className="w-full h-full object-cover object-[center_12%]"
+                />
+              </div>
+              {/* Corner accent */}
+              <div className="absolute -top-2 -right-2 w-3 h-3 bg-primary" />
+            </div>
+
+            {/* Status clock */}
+            <div className="text-center">
+              <div className="text-utility-xs text-on-dark-mute mb-2">{isEn ? "CURRENT STATUS" : "目前狀態"}</div>
+              <div className="flex items-center gap-2 justify-center">
+                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                <span className="text-body-strong text-on-dark">{isEn ? "AVAILABLE" : "可接受合作"}</span>
+              </div>
+              <div className="mt-2">
+                <SystemClock />
+              </div>
+            </div>
+          </motion.div>
+        </div>
 
         {/* Scroll indicator */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.6, duration: 0.8 }}
-          className="flex flex-col items-center gap-3 mt-2 sm:mt-6"
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ delay: 1.2, duration: 0.8 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
         >
-          <span className="font-mono text-[10px] text-white/15 tracking-[4px]">SCROLL</span>
+          <span className="text-utility-xs text-on-dark-mute tracking-[4px]">{isEn ? "SCROLL" : "捲動"}</span>
           <motion.div
-            animate={{ scaleY: [1, 0.3, 1], opacity: [0.4, 1, 0.4] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            className="w-px h-14 bg-gradient-to-b from-primary/60 to-transparent origin-top"
+            className="w-px h-8 bg-primary"
+            animate={{ scaleY: [1, 0.5, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           />
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 }

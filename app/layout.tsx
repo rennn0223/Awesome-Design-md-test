@@ -1,20 +1,13 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { LangProvider } from "./providers";
 import { RouterTransition } from "./transition-wrapper";
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  weight: ["400", "700"],
-  display: "swap",
-});
-
 const inter = Inter({
   subsets: ["latin"],
+  weight: ["400", "700"],
   variable: "--font-sans",
-  weight: ["400", "700", "900"],
   display: "swap",
 });
 
@@ -58,8 +51,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
+    <html lang="en" className={`${inter.variable}`}>
+      <body className={`${inter.variable} font-sans antialiased`}>
         <LangProvider>
           <RouterTransition>
             {children}

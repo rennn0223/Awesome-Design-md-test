@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import type { Lang } from "@/app/providers";
 
@@ -21,7 +21,7 @@ interface Cert {
 const CERTS: Cert[] = [
   {
     tag: "NVIDIA_DLI",
-    tagColor: "#3b82f6",
+    tagColor: "#76b900",
     title: "Isaac for Accelerated Robotics",
     en: "Official certification for deploying AI robotics workflows using NVIDIA Isaac.",
     zh: "NVIDIA 官方認證，掌握使用 Isaac 部署 AI 機器人工作流之核心能力。",
@@ -32,7 +32,7 @@ const CERTS: Cert[] = [
   },
   {
     tag: "NVIDIA_DLI",
-    tagColor: "#3b82f6",
+    tagColor: "#76b900",
     title: "OpenUSD: Stages, Prims & Attributes",
     en: "Mastery of Universal Scene Description for Omniverse Digital Twin environments.",
     zh: "精通通用場景描述 (USD)，用於建構 Omniverse 數位孿生底層環境。",
@@ -43,7 +43,7 @@ const CERTS: Cert[] = [
   },
   {
     tag: "NVIDIA_DLI",
-    tagColor: "#3b82f6",
+    tagColor: "#76b900",
     title: "AI on Jetson Nano",
     en: "Deployment of deep learning models on Edge AI hardware architectures.",
     zh: "具備在 Edge AI 邊緣硬體架構上部署深度學習模型之能力。",
@@ -54,7 +54,7 @@ const CERTS: Cert[] = [
   },
   {
     tag: "LANGUAGE_PRO",
-    tagColor: "#f59e0b",
+    tagColor: "#89cf00",
     title: "Duolingo English Test",
     en: "Certified English proficiency for international technical communication.",
     zh: "國際英語能力認證，具備流暢的跨國技術溝通能力。",
@@ -65,7 +65,7 @@ const CERTS: Cert[] = [
   },
   {
     tag: "HARDWARE_OP",
-    tagColor: "#10b981",
+    tagColor: "#5a8d00",
     title: "DJI Drone Professional Training",
     en: "Certified operational proficiency for commercial UAV deployment.",
     zh: "大疆專業無人機操作培訓，具備商用無人機部署與操作能力。",
@@ -76,53 +76,76 @@ const CERTS: Cert[] = [
   },
 ];
 
-function CertCard({ cert, lang, index, onPreview }: { cert: Cert; lang: Lang; index: number; onPreview: (src: string) => void }) {
+function CertCard({
+  cert,
+  lang,
+  index,
+  onPreview,
+}: {
+  cert: Cert;
+  lang: Lang;
+  index: number;
+  onPreview: (src: string) => void;
+}) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.2, 0.8, 0.2, 1] }}
-      className="glass rounded-xl p-6 flex flex-col gap-4 transition-all duration-300 hover:shadow-[0_0_24px_rgba(59,130,246,0.12)] group"
-      style={{ borderLeft: `3px solid ${cert.tagColor}25` }}
+      className="relative overflow-hidden"
     >
-      <div
-        className="font-mono text-[10px] px-2 py-1 rounded w-fit border"
-        style={{
-          color: cert.tagColor,
-          borderColor: `${cert.tagColor}35`,
-          background: `${cert.tagColor}10`,
-        }}
-      >
-        {cert.tag}
+      <div className="bg-canvas text-ink border border-hairline rounded-sm resource-card">
+        <div className="absolute -top-1 -left-1 w-3 h-3 bg-primary" />
+
+        <div className="p-6">
+          <div className="mb-4">
+            <span className="badge-tag" style={{ backgroundColor: cert.tagColor }}>
+              {cert.tag}
+            </span>
+          </div>
+
+          <h3 className="text-card-title text-ink mb-2">{cert.title}</h3>
+
+          <p className="text-body-md text-ink mb-4">{lang === "en" ? cert.en : cert.zh}</p>
+
+          <div className="flex flex-wrap gap-2">
+            {cert.type === "link" ? (
+              <a
+                href={cert.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="button-outline"
+              >
+                {lang === "en" ? cert.btnEn : cert.btnZh}
+              </a>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => cert.image && onPreview(cert.image)}
+                  className="button-primary"
+                >
+                  {lang === "en" ? cert.btnEn : cert.btnZh}
+                </button>
+                {cert.image && (
+                  <a
+                    href={cert.image}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="button-outline"
+                  >
+                    {lang === "en" ? "OPEN PDF" : "開啟 PDF"}
+                  </a>
+                )}
+              </>
+            )}
+          </div>
+        </div>
       </div>
-
-      <h3 className="text-lg font-black text-white leading-snug">{cert.title}</h3>
-
-      <p className="text-white/35 text-sm leading-relaxed flex-1">
-        {lang === "en" ? cert.en : cert.zh}
-      </p>
-
-      {cert.type === "link" ? (
-        <a
-          href={cert.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-mono text-[11px] text-primary border border-primary/25 px-4 py-2.5 rounded text-center hover:bg-primary/10 hover:border-primary/50 transition-all duration-300"
-        >
-          {lang === "en" ? cert.btnEn : cert.btnZh}
-        </a>
-      ) : (
-        <button
-          onClick={() => cert.image && onPreview(cert.image)}
-          className="font-mono text-[11px] text-primary border border-primary/25 px-4 py-2.5 rounded text-center hover:bg-primary/10 hover:border-primary/50 transition-all duration-300"
-        >
-          {lang === "en" ? cert.btnEn : cert.btnZh}
-        </button>
-      )}
     </motion.div>
   );
 }
@@ -132,73 +155,93 @@ export default function Certificates({ lang, ...props }: { lang: Lang } & React.
   const titleRef = useRef(null);
   const inView = useInView(titleRef, { once: true });
 
+  useEffect(() => {
+    if (!preview) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPreview(null);
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [preview]);
+
   return (
-    <section id="certificates" {...props} className="py-32 px-6 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_50%,rgba(59,130,246,0.03),transparent)] pointer-events-none" />
+    <>
+      <section id="certificates" {...props} className="relative">
+        <div className="pt-[64px] pb-[64px] px-6">
+          <div className="max-w-6xl mx-auto">
+            <motion.h2
+              ref={titleRef}
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+              className="text-display-lg text-on-dark text-center mb-8"
+            >
+              {lang === "en" ? "PROFESSIONAL CERTIFICATES" : "專業認證與授權"}
+            </motion.h2>
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        <motion.h2
-          ref={titleRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-          className="text-[clamp(2.5rem,8vw,4.5rem)] font-black tracking-[-1px] sm:tracking-[-3px] uppercase text-center mb-20"
-        >
-          {lang === "en" ? "SYSTEM_CERTIFICATES" : "專業認證與授權"}
-        </motion.h2>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {CERTS.map((c, i) => (
-            <CertCard key={i} cert={c} lang={lang} index={i} onPreview={setPreview} />
-          ))}
+            <div className="grid gap-6 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+              {CERTS.map((c, i) => (
+                <CertCard key={i} cert={c} lang={lang} index={i} onPreview={setPreview} />
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Modal */}
       <AnimatePresence>
         {preview && (
           <motion.div
+            key={preview}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="pdf-preview-title"
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/75"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/88 backdrop-blur-xl z-[9999] flex items-center justify-center p-4"
             onClick={() => setPreview(null)}
           >
             <motion.div
-              initial={{ scale: 0.85, opacity: 0 }}
+              className="relative flex flex-col w-full max-w-5xl h-[min(90vh,900px)] bg-canvas rounded-sm border border-hairline overflow-hidden shadow-lg"
+              initial={{ scale: 0.97, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.85, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 280, damping: 24 }}
-              className="relative max-w-3xl w-full"
+              exit={{ scale: 0.97, opacity: 0 }}
+              transition={{ duration: 0.2 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                onClick={() => setPreview(null)}
-                className="absolute -top-4 -right-4 w-9 h-9 bg-primary rounded-full text-white font-bold flex items-center justify-center z-10 text-lg leading-none"
-                style={{ boxShadow: "0 0 20px rgba(59,130,246,0.6)" }}
-              >
-                ×
-              </button>
-              {preview.endsWith(".pdf") ? (
-                <embed
-                  src={preview}
-                  type="application/pdf"
-                  className="w-full rounded-xl"
-                  style={{ height: "70vh", border: "2px solid rgba(59,130,246,0.4)", boxShadow: "0 0 50px rgba(59,130,246,0.25)" }}
-                />
-              ) : (
-                <img
-                  src={preview}
-                  alt="Certificate preview"
-                  className="w-full rounded-xl"
-                  style={{ border: "2px solid rgba(59,130,246,0.4)", boxShadow: "0 0 50px rgba(59,130,246,0.25)" }}
-                />
-              )}
+              <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 border-b border-hairline shrink-0 bg-canvas">
+                <span id="pdf-preview-title" className="font-mono text-xs text-body truncate pr-2">
+                  {lang === "en" ? "DOCUMENT PREVIEW" : "文件預覽"}
+                </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <a
+                    href={preview}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="button-outline text-sm px-4 py-2"
+                  >
+                    {lang === "en" ? "OPEN IN NEW TAB" : "新分頁開啟"}
+                  </a>
+                  <button type="button" onClick={() => setPreview(null)} className="button-primary text-sm px-4 py-2">
+                    {lang === "en" ? "CLOSE" : "關閉"}
+                  </button>
+                </div>
+              </div>
+              <iframe
+                title={lang === "en" ? "Certificate PDF" : "證書 PDF"}
+                src={preview}
+                className="flex-1 w-full min-h-0 border-0 bg-surface-soft"
+              />
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </section>
+    </>
   );
 }

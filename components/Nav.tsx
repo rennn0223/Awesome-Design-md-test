@@ -1,125 +1,297 @@
 "use client";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { Lang } from "@/app/providers";
+import { useLang } from "@/app/providers";
+import { motion, AnimatePresence } from "framer-motion";
 
-const NAV_ITEMS = [
-  { id: "home", labelEn: "HOME", labelZh: "首頁" },
-  { id: "projects", labelEn: "PROJECTS", labelZh: "專案" },
-  { id: "timeline", labelEn: "TIMELINE", labelZh: "時間軸" },
-  { id: "certificates", labelEn: "CERTS", labelZh: "認證" },
-  { id: "contact", labelEn: "CONTACT", labelZh: "聯絡" },
+type Lang = "en" | "zh";
+
+const NAV_ITEMS: { id: string; labelEn: string; labelZh: string; path: string }[] = [
+  { id: "home", labelEn: "HOME", labelZh: "首頁", path: "/" },
+  { id: "projects", labelEn: "PROJECTS", labelZh: "專案", path: "/projects" },
+  { id: "timeline", labelEn: "TIMELINE", labelZh: "時間軸", path: "/timeline" },
+  { id: "blog", labelEn: "BLOG", labelZh: "部落格", path: "/blog" },
+  { id: "certificates", labelEn: "CERTIFICATES", labelZh: "認證", path: "/certificates" },
+  { id: "contact", labelEn: "CONTACT", labelZh: "聯絡", path: "/contact" },
 ];
 
-const PAGE_PATHS: Record<string, string> = {
-  home: "/",
-  projects: "/projects",
-  timeline: "/timeline",
-  certificates: "/certificates",
-  contact: "/contact",
-};
+const PAGE_PATHS: Record<string, string> = {};
+NAV_ITEMS.forEach((item) => { PAGE_PATHS[item.path] = item.id; });
 
-export default function Nav({
-  lang,
-  setLang,
-  title,
-}: {
-  lang: Lang;
-  setLang: (l: Lang) => void;
-  title?: string;
-}) {
-  const pathname = usePathname();
-  const [mobileOpen, setMobileOpen] = useState(false);
+/* -- Search Overlay -- */
+function SearchOverlay({ onClose }: { onClose: () => void }) {
+  const { lang } = useLang();
+  const isEn = lang === "en";
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const active = NAV_ITEMS.find((item) => PAGE_PATHS[item.id] === pathname)?.id ?? "home";
+  useEffect(() => {
+    const focusTimeout = setTimeout(() => inputRef.current?.focus(), 100);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      clearTimeout(focusTimeout);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
 
   return (
-    <motion.nav
-      initial={{ y: -60, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-      className="fixed top-0 left-0 right-0 z-50"
+    <motion.div
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-[100] bg-surface-dark flex flex-col items-center pt-[20vh]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      onClick={onClose}
     >
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 shrink-0">
-          <img src="/assets/nvidia.png" alt="" className="h-5 brightness-0 invert opacity-60 hover:opacity-90 transition-opacity" />
-          <span className="text-white/15 text-xs">×</span>
-          <img src="/assets/nchu.png" alt="" className="h-5 brightness-0 invert opacity-60 hover:opacity-90 transition-opacity" />
-          <span className="text-white/15 text-xs">×</span>
-          <img src="/assets/msi.png" alt="" className="h-5 brightness-0 invert opacity-60 hover:opacity-90 transition-opacity" />
-        </Link>
-
-        {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-8">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.id}
-              href={PAGE_PATHS[item.id]}
-              className={`font-mono text-[11px] tracking-widest relative transition-all duration-300 pb-1 ${
-                active === item.id ? "text-primary" : "text-white/35 hover:text-white/70"
-              }`}
-            >
-              {lang === "en" ? item.labelEn : item.labelZh}
-              {active === item.id && (
-                <motion.div
-                  layoutId="nav-underline"
-                  className="absolute -bottom-0.5 left-0 right-0 h-px bg-primary"
-                  style={{ boxShadow: "0 0 8px rgba(59,130,246,0.9)" }}
-                />
-              )}
-            </Link>
-          ))}
-          <button
-            onClick={() => setLang(lang === "en" ? "zh" : "en")}
-            className="font-mono text-[11px] text-white/35 hover:text-accent border border-white/10 hover:border-accent/40 px-3 py-1 rounded transition-all duration-300"
-          >
-            {lang === "en" ? "中文" : "EN"}
-          </button>
+      <motion.div
+        className="w-full max-w-2xl px-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.2 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Search input */}
+        <div className="flex items-center gap-3 border-b border-on-dark/30 pb-4">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-on-dark-mute">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder={isEn ? "Search projects, blog posts..." : "搜尋專案、文章..."}
+            className="text-on-dark bg-transparent border-0 focus:outline-none text-display-lg w-full placeholder:text-on-dark-mute"
+            spellCheck={false}
+            autoComplete="off"
+          />
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          className="md:hidden text-white/60 text-lg"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          {mobileOpen ? "✕" : "☰"}
-        </button>
-      </div>
+        {/* Recent / suggested */}
+        <div className="mt-8">
+          <div className="text-utility-xs text-on-dark-mute mb-4">{isEn ? "RECENT" : "最近瀏覽"}</div>
+          <div className="space-y-1">
+            {[
+              { label: isEn ? "GTC 2026 Conference" : "GTC 2026 大會", path: "/projects" },
+              { label: isEn ? "MGX Infrastructure" : "MGX 伺服器建置", path: "/timeline" },
+              { label: isEn ? "Isaac for Accelerated Robotics" : "Isaac 加速機器人認證", path: "/certificates" },
+            ].map((item, i) => (
+              <Link
+                key={i}
+                href={item.path}
+                className="flex items-center justify-between w-full text-left py-3 px-2 hover:bg-surface-elevated transition-colors group"
+                onClick={onClose}
+              >
+                <span className="text-body-md text-on-dark-mute group-hover:text-on-dark">{item.label}</span>
+                <span className="text-button-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                  {isEn ? "OPEN →" : "開啟 →"}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
 
-      {/* Mobile drawer */}
-      <AnimatePresence>
-        {mobileOpen && (
+        {/* Keyboard hint */}
+        <div className="flex items-center gap-2 mt-8 justify-end">
+          <kbd className="inline-flex items-center justify-center px-2 py-1 text-caption-xs text-on-dark-mute border border-hairline-strong rounded-xs">
+            ESC
+          </kbd>
+          <span className="text-caption-sm text-on-dark-mute">{isEn ? "to close" : "關閉"}</span>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* -- Nav -- */
+export default function Nav() {
+  const { lang, setLang } = useLang();
+  const isEn = lang === "en";
+  const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  const active = NAV_ITEMS.find((item) => PAGE_PATHS[item.path] === pathname)?.id ?? "home";
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [mobileOpen]);
+
+  return (
+    <>
+      {/* Primary Nav — per DESIGN.md primary-nav spec */}
+      <nav className="fixed top-0 left-0 right-0 z-50 primary-nav" role="navigation" aria-label="Main navigation">
+        <div className="max-w-content mx-auto px-6 flex items-center justify-between h-16">
+          {/* Left: Brand */}
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <span className="text-heading-sm text-on-dark tracking-tight">
+              LIN<span className="text-primary">.</span>
+            </span>
+            <span className="text-caption-sm text-on-dark-mute hidden sm:inline">SYSTEMS ARCHITECT</span>
+          </Link>
+
+          {/* Center: Nav items */}
+          <div className="hidden md:flex items-center gap-1">
+            {NAV_ITEMS.map((item) => (
+              <Link
+                key={item.id}
+                href={item.path}
+                className={`relative inline-flex items-center px-4 py-2 text-sm font-body-strong transition-colors ${
+                  active === item.id
+                    ? "text-on-dark"
+                    : "text-on-dark-mute hover:text-on-dark"
+                }`}
+                aria-current={active === item.id ? "page" : undefined}
+              >
+                {isEn ? item.labelEn : item.labelZh}
+                {active === item.id && (
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-0.5 bg-primary" />
+                )}
+              </Link>
+            ))}
+          </div>
+
+          {/* Right: Search + Language + CTA */}
+          <div className="flex items-center gap-2">
+            {/* Search trigger */}
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className="inline-flex items-center justify-center w-10 h-10 text-on-dark-mute hover:text-on-dark transition-colors"
+              aria-label={isEn ? "Search" : "搜尋"}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </button>
+
+            {/* Language toggle */}
+            <button
+              onClick={() => setLang(lang === "en" ? "zh" : "en")}
+              className="hidden sm:inline-flex text-sm font-body-strong px-3 py-2 text-on-dark-mute hover:text-on-dark transition-colors"
+            >
+              {isEn ? "中文" : "EN"}
+            </button>
+
+            {/* Get Started CTA */}
+            <Link href="/contact">
+              <button className="hidden sm:inline-flex button-primary text-button-sm" style={{ height: 36, padding: "8px 16px" }}>
+                {isEn ? "GET STARTED" : "開始"}
+              </button>
+            </Link>
+
+            {/* Mobile hamburger */}
+            <button
+              className="md:hidden w-10 h-10 flex items-center justify-center text-on-dark-mute hover:text-on-dark transition-colors"
+              onClick={() => setMobileOpen(true)}
+              aria-label={isEn ? "Open menu" : "開啟選單"}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile drawer — slides in from right */}
+      <AnimatePresence>{mobileOpen && (
+        <>
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.25 }}
-            className="md:hidden bg-[#030303]/95 backdrop-blur-2xl border-b border-white/5"
+            className="fixed inset-0 z-[60] bg-black/50 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setMobileOpen(false)}
+          />
+          <motion.div
+            className="fixed top-0 right-0 z-[70] h-full w-80 max-w-[85vw] bg-surface-dark border-l border-hairline-strong md:hidden"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
           >
-            <div className="px-6 py-4 flex flex-col gap-1">
-              {NAV_ITEMS.map((item) => (
-                <Link
-                  key={item.id}
-                  href={PAGE_PATHS[item.id]}
-                  className={`text-left font-mono text-sm py-3 border-b border-white/5 transition-colors ${
-                    active === item.id ? "text-primary" : "text-white/40"
-                  }`}
-                >
-                  {lang === "en" ? item.labelEn : item.labelZh}
-                </Link>
-              ))}
+            <div className="pt-[72px] px-6 pb-6 h-full overflow-y-auto">
+              {/* Close */}
+              <button
+                className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center text-on-dark-mute hover:text-on-dark"
+                onClick={() => setMobileOpen(false)}
+                aria-label="Close menu"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+
+              <div className="font-utility-xs text-on-dark-mute mb-6 mt-4">MAIN MENU</div>
+              <nav className="space-y-1">
+                {NAV_ITEMS.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={item.path}
+                    onClick={() => setMobileOpen(false)}
+                    className={`block py-3 pl-3 text-body-sm transition-colors border-l-2 ${
+                      active === item.id
+                        ? "text-on-dark border-primary"
+                        : "text-on-dark-mute hover:text-on-dark border-transparent"
+                    }`}
+                  >
+                    {isEn ? item.labelEn : item.labelZh}
+                  </Link>
+                ))}
+              </nav>
+
+              {/* Mobile lang toggle */}
               <button
                 onClick={() => setLang(lang === "en" ? "zh" : "en")}
-                className="text-left font-mono text-sm py-3 text-accent"
+                className="block py-3 pl-3 mt-4 text-body-sm text-on-dark-mute hover:text-on-dark transition-colors border-l-2 border-transparent"
               >
-                {lang === "en" ? "切換中文" : "Switch to EN"}
+                {isEn ? "Switch to Chinese" : "切換為英文"}
               </button>
+
+              {/* Mobile CTA */}
+              <div className="mt-6">
+                <Link href="/contact" onClick={() => setMobileOpen(false)}>
+                  <button className="w-full button-primary text-button-sm" style={{ height: 40, padding: "8px 16px", fontSize: 14 }}>
+                    {isEn ? "GET STARTED" : "開始"}
+                  </button>
+                </Link>
+              </div>
+
+              {/* Mobile search */}
+              <div className="mt-6">
+                <button
+                  onClick={() => { setSearchOpen(true); setMobileOpen(false); }}
+                  className="w-full flex items-center gap-3 py-3 text-body-sm text-on-dark-mute hover:text-on-dark transition-colors border-b border-hairline/20"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                  {isEn ? "Search" : "搜尋"}
+                </button>
+              </div>
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+        </>
+      )}</AnimatePresence>
+
+      {/* Search overlay */}
+      <AnimatePresence>{searchOpen && <SearchOverlay onClose={() => setSearchOpen(false)} />}</AnimatePresence>
+    </>
   );
 }

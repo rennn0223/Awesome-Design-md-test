@@ -2,106 +2,539 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   NVIDIA DESIGN SYSTEM — next-portfolio
+   Strictly follows DESIGN.md token definitions
+   ============================================================ */
+
 :root {
-  --primary: #3b82f6;
-  --accent: #10b981;
-  --bg: #030303;
+  /* Primary Accent */
+  --primary: #76b900;
+  --primary-dark: #5a8d00;
+  --accent-green-pale: #bff230;
+
+  /* Surface Colors */
+  --canvas: #ffffff;
+  --surface-soft: #f7f7f7;
+  --surface-dark: #000000;
+  --surface-elevated: #1a1a1a;
+
+  /* Borders */
+  --hairline: #cccccc;
+  --hairline-strong: #5e5e5e;
+
+  /* Text Colors */
+  --ink: #000000;
+  --body: #1a1a1a;
+  --mute: #757575;
+  --stone: #898989;
+  --ash: #a7a7a7;
+  --on-dark: #ffffff;
+  --on-dark-mute: rgba(255,255,255,0.7);
+  --link-blue: #0046a4;
+
+  /* Semantic Colors */
+  --error: #e52020;
+  --error-deep: #650b0b;
+  --warning: #df6500;
+  --warning-bright: #ef9100;
+  --success-deep: #3f8500;
+  --accent-purple: #952fc6;
+  --accent-purple-deep: #4d1368;
+  --accent-purple-pale: #f9d4ff;
+  --accent-yellow-pale: #feeeb2;
+
+  /* Spacing System (8px base unit) */
+  --spacing-xxs: 2px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-xxl: 32px;
+  --spacing-section: 64px;
+
+  /* Border Radius */
+  --rounded-none: 0px;
+  --rounded-xs: 1px;
+  --rounded-sm: 2px;
+  --rounded-full: 9999px;
+
+  /* Typography Scale */
+  --text-display-xl: 48px;
+  --text-display-lg: 36px;
+  --text-heading-xl: 24px;
+  --text-heading-lg: 22px;
+  --text-heading-md: 20px;
+  --text-heading-sm: 18px;
+  --text-card-title: 17px;
+  --text-body-md: 16px;
+  --text-body-strong: 16px;
+  --text-body-sm: 15px;
+  --text-button-lg: 18px;
+  --text-button-md: 16px;
+  --text-button-sm: 14.4px;
+  --text-link-md: 15px;
+  --text-caption-md: 14px;
+  --text-caption-sm: 12px;
+  --text-caption-xs: 11px;
+  --text-utility-xs: 10px;
 }
+
+/* ============================================================
+   BASE
+   ============================================================ */
 
 html {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: #030303;
-  color: #f0f0f0;
+  background: var(--canvas);
+  color: var(--body);
+  font-family: 'NVIDIA-EMEA', Inter, Arial, Helvetica, sans-serif;
   overflow-x: hidden;
-  cursor: none;
 }
 
-@media (hover: none) and (pointer: coarse) {
-  body { cursor: auto; }
+/* Selection color */
+::selection {
+  background: var(--primary);
+  color: var(--on-primary);
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: #0a0a0a; }
-::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 2px; }
+/* ============================================================
+   TYPOGRAPHY SCALE
+   ============================================================ */
 
-/* Grid background */
-.grid-bg {
-  background-image:
-    linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
-  background-size: 60px 60px;
+.text-display-xl {
+  font-size: var(--text-display-xl);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
 }
 
-/* Glass */
-.glass {
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+.text-display-lg {
+  font-size: var(--text-display-lg);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
 }
 
-/* Typing animation */
-@keyframes typing {
-  from { max-width: 0; }
-  to { max-width: min(700px, 92vw); }
-}
-@keyframes blink {
-  from, to { border-color: transparent; }
-  50% { border-color: #10b981; }
-}
-.typing-text {
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 2px solid #10b981;
-  max-width: 0;
-  animation: typing 2.5s steps(45, end) 0.8s forwards, blink 0.75s step-end infinite;
+.text-heading-xl {
+  font-size: var(--text-heading-xl);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
 }
 
-/* Page watermark */
-.watermark {
+.text-heading-lg {
+  font-size: var(--text-heading-lg);
+  font-weight: 400;
+  line-height: 1.75;
+  letter-spacing: 0;
+}
+
+.text-heading-md {
+  font-size: var(--text-heading-md);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.text-heading-sm {
+  font-size: var(--text-heading-sm);
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+.text-card-title {
+  font-size: var(--text-card-title);
+  font-weight: 700;
+  line-height: 1.47;
+  letter-spacing: 0;
+}
+
+.text-body-md {
+  font-size: var(--text-body-md);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.text-body-strong {
+  font-size: var(--text-body-strong);
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.text-body-sm {
+  font-size: var(--text-body-sm);
+  font-weight: 400;
+  line-height: 1.67;
+  letter-spacing: 0;
+}
+
+.text-button-lg {
+  font-size: var(--text-button-lg);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.text-button-md {
+  font-size: var(--text-button-md);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.text-button-sm {
+  font-size: var(--text-button-sm);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.144px;
+}
+
+.text-link-md {
+  font-size: var(--text-link-md);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.text-caption-md {
+  font-size: var(--text-caption-md);
+  font-weight: 700;
+  line-height: 1.43;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.text-caption-sm {
+  font-size: var(--text-caption-sm);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.text-caption-xs {
+  font-size: var(--text-caption-xs);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.text-utility-xs {
+  font-size: var(--text-utility-xs);
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   COMPONENT BASE STYLES (NVIDIA Design System)
+   ============================================================ */
+
+/* Buttons */
+.button-primary {
+  @apply inline-flex items-center justify-center bg-primary text-on-primary font-bold rounded-sm;
+  height: 44px;
+  padding: 11px 24px;
+  font-size: var(--text-button-md);
+  line-height: 1.25;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.15s ease;
+}
+.button-primary:hover {
+  background-color: var(--primary-dark);
+}
+.button-primary:active {
+  background-color: var(--primary-dark);
+}
+.button-primary:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.button-primary-active {
+  @apply bg-primary-dark text-on-dark font-bold rounded-sm;
+  height: 44px;
+  padding: 11px 24px;
+  font-size: var(--text-button-md);
+  line-height: 1.25;
+}
+
+.button-outline {
+  @apply inline-flex items-center justify-center bg-transparent border-2 border-primary text-ink font-bold rounded-sm;
+  height: 44px;
+  padding: 11px 13px;
+  font-size: var(--text-button-md);
+  line-height: 1.25;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.button-outline:hover {
+  background-color: var(--primary);
+  color: var(--on-primary);
+}
+.button-outline:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.button-outline-on-dark {
+  @apply inline-flex items-center justify-center bg-transparent border border-on-dark text-on-dark font-bold rounded-sm;
+  height: 44px;
+  padding: 11px 24px;
+  font-size: var(--text-button-md);
+  line-height: 1.25;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.button-outline-on-dark:hover {
+  background-color: var(--on-dark);
+  color: var(--surface-dark);
+}
+
+.button-ghost-link {
+  @apply inline-flex items-center gap-1 text-primary font-bold cursor-pointer;
+  font-size: var(--text-button-md);
+  line-height: 1.25;
+  background: none;
+  border: none;
+  padding: 0;
+  transition: opacity 0.15s ease;
+}
+.button-ghost-link::after {
+  content: '→';
+  transition: transform 0.15s ease;
+}
+.button-ghost-link:hover::after {
+  transform: translateX(4px);
+}
+
+.button-disabled {
+  @apply bg-surface-soft text-ash font-bold rounded-sm cursor-not-allowed;
+  height: 44px;
+  padding: 11px 24px;
+  font-size: var(--text-button-md);
+  line-height: 1.25;
+}
+
+/* Pills & Tabs */
+.pill-tab {
+  @apply inline-flex items-center bg-transparent text-ink font-bold rounded-sm;
+  padding: 10px 18px;
+  font-size: var(--text-button-sm);
+  line-height: 1;
+  letter-spacing: 0.144px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.pill-tab:hover {
+  background-color: var(--surface-soft);
+}
+.pill-tab:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.pill-tab-active {
+  @apply bg-ink text-on-dark font-bold rounded-sm;
+  padding: 10px 18px;
+  font-size: var(--text-button-sm);
+  line-height: 1;
+  letter-spacing: 0.144px;
+}
+
+/* Badges */
+.badge-tag {
+  @apply inline-block font-bold rounded-sm uppercase;
+  font-size: var(--text-caption-md);
+  line-height: 1.43;
+  padding: 4px 10px;
+  background-color: var(--surface-soft);
+  color: var(--body);
+}
+
+/* Inputs */
+.text-input {
+  @apply bg-canvas text-ink border border-hairline font-normal rounded-sm;
+  font-size: var(--text-body-md);
+  line-height: 1.5;
+  padding: 12px 16px;
+  height: 44px;
+  width: 100%;
+  transition: border-color 0.15s ease;
+}
+.text-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  border-width: 2px;
+}
+
+.search-input {
+  @apply bg-canvas text-ink border border-hairline font-normal rounded-sm;
+  font-size: var(--text-body-md);
+  line-height: 1.5;
+  padding: 10px 16px;
+  height: 40px;
+  width: 100%;
+}
+
+/* ============================================================
+   CARD COMPONENTS
+   ============================================================ */
+
+.product-card {
+  @apply bg-canvas text-ink border border-hairline rounded-sm p-6;
+  font-size: var(--text-card-title);
+  font-weight: 700;
+  line-height: 1.47;
+}
+
+.feature-card {
+  @apply bg-canvas text-ink border border-hairline rounded-sm p-8;
+  font-size: var(--text-body-md);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.resource-card {
+  @apply bg-canvas text-ink border border-hairline rounded-sm p-6;
+  font-size: var(--text-card-title);
+  font-weight: 700;
+  line-height: 1.47;
+}
+
+.callout-stat {
+  @apply bg-canvas text-ink border border-hairline rounded-sm p-8;
+}
+
+/* Hero */
+.hero-card-dark {
+  @apply bg-surface-dark text-on-dark rounded-none;
+  padding: 80px 48px;
+}
+
+/* CTA Strip */
+.cta-strip-dark {
+  @apply bg-surface-dark text-on-dark rounded-none;
+  padding: 64px 48px;
+}
+
+/* Corner square */
+.corner-square {
+  @apply bg-primary;
+  width: 12px;
+  height: 12px;
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+
+.utility-bar {
+  @apply bg-surface-dark text-on-dark rounded-none;
+  font-size: var(--text-caption-sm);
+  font-weight: 400;
+  line-height: 1.25;
+  height: 32px;
+}
+
+.primary-nav {
+  @apply bg-surface-dark text-on-dark rounded-none;
+  font-size: var(--text-body-strong);
+  font-weight: 700;
+  line-height: 1.5;
+  height: 64px;
+}
+
+.breadcrumb-bar {
+  @apply bg-surface-soft text-body rounded-none;
+  font-size: var(--text-caption-md);
+  font-weight: 700;
+  line-height: 1.43;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  height: 48px;
+}
+
+.sub-nav-strip {
+  @apply bg-surface-soft text-ink rounded-none;
+  font-size: var(--text-button-md);
+  font-weight: 700;
+  line-height: 1.25;
+  height: 56px;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.footer-section {
+  @apply bg-surface-dark text-on-dark-mute rounded-none;
+  font-size: var(--text-body-sm);
+  font-weight: 400;
+  line-height: 1.67;
+  padding: 64px 48px;
+}
+
+/* ============================================================
+   DECORATIVE ELEMENTS
+   ============================================================ */
+
+.corner-square-accent {
+  @apply bg-primary;
+  width: 12px;
+  height: 12px;
   position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  user-select: none;
-  overflow: hidden;
-}
-.watermark span {
-  font-size: 20vw;
-  font-weight: 900;
-  color: rgba(255,255,255,0.015);
-  white-space: nowrap;
-  line-height: 0;
-  letter-spacing: -0.05em;
 }
 
-/* Page transition */
-.page-enter {
-  animation: fadeIn 0.4s ease-out;
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
 }
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+::-webkit-scrollbar-track {
+  background: var(--surface-soft);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 1px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
 }
 
-/* Scanline overlay */
-.scanlines::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.03) 2px,
-    rgba(0, 0, 0, 0.03) 4px
-  );
-  pointer-events: none;
-  z-index: 1;
+/* ============================================================
+   RESPONSIVE BREAKPOINTS (Tailwind defaults + NVIDIA extras)
+   ============================================================ */
+
+/* Ultrawide: 1920px+ - content max-width holds at 1280px */
+/* Desktop large: 1440px - 4-up card grid, 6-col footer */
+/* Desktop small: 1024px - 4-up → 3-up */
+/* Tablet: 768px - 3-up → 2-up, hamburger nav */
+/* Mobile: 480px - single column, footer accordion */
+/* Mobile narrow: 320px - hero 48px → 32px */
+
+@media (max-width: 768px) {
+  .text-display-xl {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .text-display-xl {
+    font-size: 32px;
+  }
 }
