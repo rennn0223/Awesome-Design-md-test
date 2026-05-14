@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import Sidebar from "@/components/admin/Sidebar";
 import DataEditor from "@/components/admin/DataEditor";
 
-type Page = "login" | "files" | "edit";
+type Page = "login" | "files" | "edit" | "loading";
 
 export default function AdminPage() {
   const [page, setPage] = useState<Page>("loading");
