@@ -159,14 +159,14 @@ export default function Home() {
       <Hero />
 
       {/* -- Quick Links (white body section) -- */}
-      <section className="px-6 bg-canvas" style={{ paddingTop: "48px", paddingBottom: "64px" }}>
+      <section className="px-6 bg-canvas" style={{ paddingTop: "40px", paddingBottom: "48px" }}>
         <div className="max-w-content mx-auto">
-          <div className="mb-8">
+          <div className="mb-6">
             {/* Corner square + eyebrow below */}
             <div className="w-3 h-3 bg-primary mb-2" />
-            <span className="text-[14px] font-bold text-primary uppercase">{isEn ? "NAVIGATION" : "導覽"}</span>
+            <span className="text-caption-md text-primary font-bold">{isEn ? "NAVIGATION" : "導覽"}</span>
           </div>
-          <h2 className="text-[36px] font-bold text-ink mb-8">{isEn ? "EXPLORE WORK" : "探索作品"}</h2>
+          <h2 className="text-display-lg text-ink mb-6">{isEn ? "EXPLORE WORK" : "探索作品"}</h2>
 
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {QUICK_LINKS.map((link, i) => (
@@ -177,22 +177,22 @@ export default function Home() {
       </section>
 
       {/* -- Blog Preview (white body section) -- */}
-      <section className="px-6 bg-surface-soft" style={{ paddingTop: "120px", paddingBottom: "64px" }}>
+      <section className="px-6 bg-surface-soft" style={{ paddingTop: "80px", paddingBottom: "48px" }}>
         <div className="max-w-content mx-auto">
           <motion.h2
             ref={blogTitleRef}
             initial={{ opacity: 0, y: 20 }}
             animate={blogInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-            className="text-[36px] font-bold text-ink mb-3"
+            className="text-display-lg text-ink mb-3"
           >
             {isEn ? "FROM THE BLOG" : "部落格精選"}
           </motion.h2>
           {/* Corner square accent below heading */}
-          <div className="mb-6">
+          <div className="mb-4">
             <div className="w-3 h-3 bg-primary" />
           </div>
-          <p className="text-body-md text-body max-w-xl mb-10">
+          <p className="text-body-md text-body max-w-xl mb-8">
             {isEn
               ? "Technical reflections on Digital Twin infrastructure, Embodied AI, and edge computing."
               : "關於數位孿生基礎設施、具身智能與邊緣運算的技術反思。"}

@@ -2,10 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ============================================================
-   NVIDIA DESIGN SYSTEM — next-portfolio
-   Strictly follows DESIGN.md token definitions
-   ============================================================ */
+/* ============== NVIDIA DESIGN SYSTEM — next-portfolio ============== */
 
 :root {
   /* Primary Accent */
@@ -60,7 +57,7 @@
   --rounded-sm: 2px;
   --rounded-full: 9999px;
 
-  /* Typography Scale */
+  /* Typography Scale (desktop defaults) */
   --text-display-xl: 48px;
   --text-display-lg: 36px;
   --text-heading-xl: 24px;
@@ -81,14 +78,13 @@
   --text-utility-xs: 10px;
 }
 
-/* ============================================================
-   BASE
-   ============================================================ */
+/* ============== BASE ============== */
 
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
@@ -98,443 +94,227 @@ body {
   overflow-x: hidden;
 }
 
-/* Selection color */
 ::selection {
   background: var(--primary);
   color: var(--on-primary);
 }
 
-/* ============================================================
-   TYPOGRAPHY SCALE
-   ============================================================ */
+/* ============== TYPOGRAPHY SCALE ============== */
 
-.text-display-xl {
-  font-size: var(--text-display-xl);
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: 0;
-}
+.text-display-xl { font-size: var(--text-display-xl); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+.text-display-lg { font-size: var(--text-display-lg); font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
+.text-heading-xl { font-size: var(--text-heading-xl); font-weight: 700; line-height: 1.25; letter-spacing: 0; }
+.text-heading-lg { font-size: var(--text-heading-lg); font-weight: 400; line-height: 1.65; letter-spacing: 0; }
+.text-heading-md { font-size: var(--text-heading-md); font-weight: 700; line-height: 1.25; letter-spacing: 0; }
+.text-heading-sm { font-size: var(--text-heading-sm); font-weight: 700; line-height: 1.35; letter-spacing: 0; }
+.text-card-title { font-size: var(--text-card-title); font-weight: 700; line-height: 1.4; letter-spacing: 0; }
+.text-body-md { font-size: var(--text-body-md); font-weight: 400; line-height: 1.6; letter-spacing: 0.005em; }
+.text-body-strong { font-size: var(--text-body-strong); font-weight: 700; line-height: 1.5; letter-spacing: 0; }
+.text-body-sm { font-size: var(--text-body-sm); font-weight: 400; line-height: 1.6; letter-spacing: 0.005em; }
+.text-button-lg { font-size: var(--text-button-lg); font-weight: 700; line-height: 1.25; letter-spacing: 0; }
+.text-button-md { font-size: var(--text-button-md); font-weight: 700; line-height: 1.25; letter-spacing: 0; }
+.text-button-sm { font-size: var(--text-button-sm); font-weight: 700; line-height: 1; letter-spacing: 0.144px; }
+.text-link-md { font-size: var(--text-link-md); font-weight: 400; line-height: 1.5; letter-spacing: 0; }
+.text-caption-md { font-size: var(--text-caption-md); font-weight: 700; line-height: 1.43; letter-spacing: 0; text-transform: uppercase; }
+.text-caption-sm { font-size: var(--text-caption-sm); font-weight: 400; line-height: 1.25; letter-spacing: 0; }
+.text-caption-xs { font-size: var(--text-caption-xs); font-weight: 700; line-height: 1; letter-spacing: 0; }
+.text-utility-xs { font-size: var(--text-utility-xs); font-weight: 700; line-height: 1.5; letter-spacing: 0; text-transform: uppercase; }
 
-.text-display-lg {
-  font-size: var(--text-display-lg);
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: 0;
-}
+/* ============== BUTTONS ============== */
 
-.text-heading-xl {
-  font-size: var(--text-heading-xl);
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: 0;
-}
-
-.text-heading-lg {
-  font-size: var(--text-heading-lg);
-  font-weight: 400;
-  line-height: 1.75;
-  letter-spacing: 0;
-}
-
-.text-heading-md {
-  font-size: var(--text-heading-md);
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: 0;
-}
-
-.text-heading-sm {
-  font-size: var(--text-heading-sm);
-  font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: 0;
-}
-
-.text-card-title {
-  font-size: var(--text-card-title);
-  font-weight: 700;
-  line-height: 1.47;
-  letter-spacing: 0;
-}
-
-.text-body-md {
-  font-size: var(--text-body-md);
-  font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: 0;
-}
-
-.text-body-strong {
-  font-size: var(--text-body-strong);
-  font-weight: 700;
-  line-height: 1.5;
-  letter-spacing: 0;
-}
-
-.text-body-sm {
-  font-size: var(--text-body-sm);
-  font-weight: 400;
-  line-height: 1.67;
-  letter-spacing: 0;
-}
-
-.text-button-lg {
-  font-size: var(--text-button-lg);
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: 0;
-}
-
-.text-button-md {
-  font-size: var(--text-button-md);
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: 0;
-}
-
-.text-button-sm {
-  font-size: var(--text-button-sm);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0.144px;
-}
-
-.text-link-md {
-  font-size: var(--text-link-md);
-  font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: 0;
-}
-
-.text-caption-md {
-  font-size: var(--text-caption-md);
-  font-weight: 700;
-  line-height: 1.43;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
-.text-caption-sm {
-  font-size: var(--text-caption-sm);
-  font-weight: 400;
-  line-height: 1.25;
-  letter-spacing: 0;
-}
-
-.text-caption-xs {
-  font-size: var(--text-caption-xs);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0;
-}
-
-.text-utility-xs {
-  font-size: var(--text-utility-xs);
-  font-weight: 700;
-  line-height: 1.5;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
-/* ============================================================
-   COMPONENT BASE STYLES (NVIDIA Design System)
-   ============================================================ */
-
-/* Buttons */
 .button-primary {
   @apply inline-flex items-center justify-center bg-primary text-on-primary font-bold rounded-sm;
-  height: 44px;
-  padding: 11px 24px;
-  font-size: var(--text-button-md);
-  line-height: 1.25;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.15s ease;
+  height: 44px; padding: 11px 24px; font-size: var(--text-button-md); line-height: 1.25;
+  cursor: pointer; border: none; transition: background-color 0.15s ease, transform 0.1s ease;
 }
-.button-primary:hover {
-  background-color: var(--primary-dark);
-}
-.button-primary:active {
-  background-color: var(--primary-dark);
-}
-.button-primary:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
+.button-primary:hover { background-color: var(--primary-dark); }
+.button-primary:active { background-color: var(--primary-dark); transform: scale(0.98); }
+.button-primary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 
 .button-primary-active {
   @apply bg-primary-dark text-on-dark font-bold rounded-sm;
-  height: 44px;
-  padding: 11px 24px;
-  font-size: var(--text-button-md);
-  line-height: 1.25;
+  height: 44px; padding: 11px 24px; font-size: var(--text-button-md); line-height: 1.25;
 }
 
 .button-outline {
   @apply inline-flex items-center justify-center bg-transparent border-2 border-primary text-ink font-bold rounded-sm;
-  height: 44px;
-  padding: 11px 13px;
-  font-size: var(--text-button-md);
-  line-height: 1.25;
-  cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  height: 44px; padding: 11px 13px; font-size: var(--text-button-md); line-height: 1.25;
+  cursor: pointer; transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
-.button-outline:hover {
-  background-color: var(--primary);
-  color: var(--on-primary);
-}
-.button-outline:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
+.button-outline:hover { background-color: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+.button-outline:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 
 .button-outline-on-dark {
   @apply inline-flex items-center justify-center bg-transparent border border-on-dark text-on-dark font-bold rounded-sm;
-  height: 44px;
-  padding: 11px 24px;
-  font-size: var(--text-button-md);
-  line-height: 1.25;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
+  height: 44px; padding: 11px 24px; font-size: var(--text-button-md); line-height: 1.25;
+  cursor: pointer; transition: background-color 0.15s ease, color 0.15s ease;
 }
-.button-outline-on-dark:hover {
-  background-color: var(--on-dark);
-  color: var(--surface-dark);
-}
+.button-outline-on-dark:hover { background-color: var(--on-dark); color: var(--surface-dark); }
 
 .button-ghost-link {
   @apply inline-flex items-center gap-1 text-primary font-bold cursor-pointer;
-  font-size: var(--text-button-md);
-  line-height: 1.25;
-  background: none;
-  border: none;
-  padding: 0;
+  font-size: var(--text-button-md); line-height: 1.25; background: none; border: none; padding: 0;
   transition: opacity 0.15s ease;
 }
-.button-ghost-link::after {
-  content: '→';
-  transition: transform 0.15s ease;
-}
-.button-ghost-link:hover::after {
-  transform: translateX(4px);
-}
+.button-ghost-link::after { content: '\2192'; transition: transform 0.15s ease; }
+.button-ghost-link:hover::after { transform: translateX(4px); }
 
 .button-disabled {
   @apply bg-surface-soft text-ash font-bold rounded-sm cursor-not-allowed;
-  height: 44px;
-  padding: 11px 24px;
-  font-size: var(--text-button-md);
-  line-height: 1.25;
+  height: 44px; padding: 11px 24px; font-size: var(--text-button-md); line-height: 1.25;
 }
 
-/* Pills & Tabs */
+/* ============== PILLS & TABS ============== */
+
 .pill-tab {
   @apply inline-flex items-center bg-transparent text-ink font-bold rounded-sm;
-  padding: 10px 18px;
-  font-size: var(--text-button-sm);
-  line-height: 1;
-  letter-spacing: 0.144px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  padding: 8px 14px; font-size: var(--text-button-sm); line-height: 1; letter-spacing: 0.144px;
+  border: none; cursor: pointer; transition: background-color 0.15s ease, color 0.15s ease;
 }
-.pill-tab:hover {
-  background-color: var(--surface-soft);
-}
-.pill-tab:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
+.pill-tab:hover { background-color: var(--surface-soft); }
+.pill-tab:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 
 .pill-tab-active {
   @apply bg-ink text-on-dark font-bold rounded-sm;
-  padding: 10px 18px;
-  font-size: var(--text-button-sm);
-  line-height: 1;
-  letter-spacing: 0.144px;
+  padding: 8px 14px; font-size: var(--text-button-sm); line-height: 1; letter-spacing: 0.144px;
 }
 
-/* Badges */
+/* ============== BADGES ============== */
+
 .badge-tag {
   @apply inline-block font-bold rounded-sm uppercase;
-  font-size: var(--text-caption-md);
-  line-height: 1.43;
-  padding: 4px 10px;
-  background-color: var(--surface-soft);
-  color: var(--body);
+  font-size: var(--text-caption-md); line-height: 1.43; padding: 4px 10px;
+  background-color: var(--surface-soft); color: var(--body);
 }
 
-/* Inputs */
+/* ============== INPUTS ============== */
+
 .text-input {
   @apply bg-canvas text-ink border border-hairline font-normal rounded-sm;
-  font-size: var(--text-body-md);
-  line-height: 1.5;
-  padding: 12px 16px;
-  height: 44px;
-  width: 100%;
+  font-size: var(--text-body-md); line-height: 1.5; padding: 12px 16px; height: 44px; width: 100%;
   transition: border-color 0.15s ease;
 }
-.text-input:focus {
-  outline: none;
-  border-color: var(--primary);
-  border-width: 2px;
-}
+.text-input:focus { outline: none; border-color: var(--primary); border-width: 2px; }
 
 .search-input {
   @apply bg-canvas text-ink border border-hairline font-normal rounded-sm;
-  font-size: var(--text-body-md);
-  line-height: 1.5;
-  padding: 10px 16px;
-  height: 40px;
-  width: 100%;
+  font-size: var(--text-body-md); line-height: 1.5; padding: 10px 16px; height: 40px; width: 100%;
 }
 
-/* ============================================================
-   CARD COMPONENTS
-   ============================================================ */
+/* ============== CARDS ============== */
 
 .product-card {
   @apply bg-canvas text-ink border border-hairline rounded-sm p-6;
-  font-size: var(--text-card-title);
-  font-weight: 700;
-  line-height: 1.47;
+  font-size: var(--text-card-title); font-weight: 700; line-height: 1.47;
 }
 
 .feature-card {
-  @apply bg-canvas text-ink border border-hairline rounded-sm p-8;
-  font-size: var(--text-body-md);
-  font-weight: 400;
-  line-height: 1.5;
+  @apply bg-canvas text-ink border border-hairline rounded-sm p-6;
+  font-size: var(--text-body-md); font-weight: 400; line-height: 1.5;
 }
 
 .resource-card {
   @apply bg-canvas text-ink border border-hairline rounded-sm p-6;
-  font-size: var(--text-card-title);
-  font-weight: 700;
-  line-height: 1.47;
+  font-size: var(--text-card-title); font-weight: 700; line-height: 1.47;
 }
 
 .callout-stat {
   @apply bg-canvas text-ink border border-hairline rounded-sm p-8;
 }
 
-/* Hero */
-.hero-card-dark {
-  @apply bg-surface-dark text-on-dark rounded-none;
-  padding: 80px 48px;
-}
-
-/* CTA Strip */
+.hero-card-dark { @apply bg-surface-dark text-on-dark rounded-none; padding: 80px 48px; }
 .cta-strip-dark {
   @apply bg-surface-dark text-on-dark rounded-none;
   padding: 64px 48px;
+  background: linear-gradient(to bottom, var(--canvas) 0%, var(--surface-dark) 15%, var(--surface-dark) 85%, var(--canvas) 100%);
 }
 
-/* Corner square */
-.corner-square {
-  @apply bg-primary;
-  width: 12px;
-  height: 12px;
+.cta-strip-dark + section,
+.cta-strip-dark ~ section:first-of-type {
+  background: linear-gradient(to bottom, var(--surface-dark) 0%, var(--canvas) 5%, var(--canvas) 100%);
 }
 
-/* ============================================================
-   NAVIGATION
-   ============================================================ */
-
-.utility-bar {
-  @apply bg-surface-dark text-on-dark rounded-none;
-  font-size: var(--text-caption-sm);
-  font-weight: 400;
-  line-height: 1.25;
-  height: 32px;
+/* Section transition bridges */
+.section-bridge {
+  height: 40px;
+  background: linear-gradient(to bottom, var(--surface-dark), var(--canvas));
 }
 
-.primary-nav {
-  @apply bg-surface-dark text-on-dark rounded-none;
-  font-size: var(--text-body-strong);
-  font-weight: 700;
-  line-height: 1.5;
-  height: 64px;
+.section-bridge-reverse {
+  height: 40px;
+  background: linear-gradient(to bottom, var(--canvas), var(--surface-dark));
 }
 
-.breadcrumb-bar {
-  @apply bg-surface-soft text-body rounded-none;
-  font-size: var(--text-caption-md);
-  font-weight: 700;
-  line-height: 1.43;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  height: 48px;
-}
+.corner-square { @apply bg-primary; width: 12px; height: 12px; }
 
-.sub-nav-strip {
-  @apply bg-surface-soft text-ink rounded-none;
-  font-size: var(--text-button-md);
-  font-weight: 700;
-  line-height: 1.25;
-  height: 56px;
-}
+/* ============== NAVIGATION ============== */
 
-/* ============================================================
-   FOOTER
-   ============================================================ */
+.utility-bar { @apply bg-surface-dark text-on-dark rounded-none; font-size: var(--text-caption-sm); font-weight: 400; line-height: 1.25; height: 32px; }
+.primary-nav { @apply bg-surface-dark text-on-dark rounded-none; font-size: var(--text-body-strong); font-weight: 700; line-height: 1.5; height: 64px; }
+.breadcrumb-bar { @apply bg-surface-soft text-body rounded-none; font-size: var(--text-caption-md); font-weight: 700; line-height: 1.43; letter-spacing: 0; text-transform: uppercase; height: 48px; }
+.sub-nav-strip { @apply bg-surface-soft text-ink rounded-none; font-size: var(--text-button-md); font-weight: 700; line-height: 1.25; height: 56px; }
 
-.footer-section {
-  @apply bg-surface-dark text-on-dark-mute rounded-none;
-  font-size: var(--text-body-sm);
-  font-weight: 400;
-  line-height: 1.67;
-  padding: 64px 48px;
-}
+/* ============== FOOTER ============== */
 
-/* ============================================================
-   DECORATIVE ELEMENTS
-   ============================================================ */
+.footer-section { @apply bg-surface-dark text-on-dark-mute rounded-none; font-size: var(--text-body-sm); font-weight: 400; line-height: 1.67; padding: 64px 48px; }
 
-.corner-square-accent {
-  @apply bg-primary;
-  width: 12px;
-  height: 12px;
-  position: absolute;
-}
+/* ============== DECORATIVE ============== */
 
-/* ============================================================
-   SCROLLBAR
-   ============================================================ */
+.corner-square-accent { @apply bg-primary; width: 12px; height: 12px; position: absolute; }
 
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--surface-soft);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 1px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-dark);
-}
+/* ============== SCROLLBAR ============== */
 
-/* ============================================================
-   RESPONSIVE BREAKPOINTS (Tailwind defaults + NVIDIA extras)
-   ============================================================ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surface-soft); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 1px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
 
-/* Ultrawide: 1920px+ - content max-width holds at 1280px */
-/* Desktop large: 1440px - 4-up card grid, 6-col footer */
-/* Desktop small: 1024px - 4-up → 3-up */
-/* Tablet: 768px - 3-up → 2-up, hamburger nav */
-/* Mobile: 480px - single column, footer accordion */
-/* Mobile narrow: 320px - hero 48px → 32px */
+/* ============== RESPONSIVE BREAKPOINTS ============== */
 
+/* iPad / tablet: 768px */
 @media (max-width: 768px) {
-  .text-display-xl {
-    font-size: 36px;
-  }
+  .text-display-xl { font-size: 36px; }
+  .text-display-lg { font-size: 28px; }
+  .text-heading-xl { font-size: 22px; }
+  .text-heading-md { font-size: 19px; }
+  .text-card-title { font-size: 16px; }
+  .text-body-md { font-size: 15px; }
+  .text-body-sm { font-size: 14px; }
+  .text-button-md { font-size: 15px; }
+  .text-button-sm { font-size: 13.5px; }
+  .text-caption-md { font-size: 13px; }
+  .text-utility-xs { font-size: 9px; }
+
+  .resource-card, .feature-card, .product-card { padding: 16px; }
 }
 
-@media (max-width: 480px) {
-  .text-display-xl {
-    font-size: 32px;
-  }
+/* iPhone 13 mini / narrow: 430px */
+@media (max-width: 430px) {
+  .text-display-xl { font-size: 30px; letter-spacing: -0.025em; }
+  .text-display-lg { font-size: 24px; }
+  .text-heading-xl { font-size: 20px; }
+  .text-heading-md { font-size: 18px; }
+  .text-card-title { font-size: 15px; }
+  .text-body-md { font-size: 14px; line-height: 1.55; }
+  .text-body-sm { font-size: 13px; line-height: 1.55; }
+  .text-button-md { font-size: 14px; }
+  .text-button-sm { font-size: 13px; }
+  .text-caption-md { font-size: 12px; }
+  .text-utility-xs { font-size: 9px; }
+
+  .resource-card, .feature-card, .product-card { padding: 14px; }
+  .cta-strip-dark { padding: 48px 20px; }
+  .hero-card-dark { padding: 48px 20px; }
 }
+
+/* iPhone SE / extra narrow: 320px */
+@media (max-width: 320px) {
+  .text-display-xl { font-size: 28px; }
+  .text-display-lg { font-size: 22px; }
+  .text-heading-xl { font-size: 19px; }
+  .text-body-md { font-size: 13.5px; }
+  .text-body-sm { font-size: 12.5px; }
+}
+
+/* Max width content */
+.max-w-content { max-width: 1280px; }

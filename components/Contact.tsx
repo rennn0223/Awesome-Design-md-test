@@ -20,7 +20,7 @@ export default function Contact({ lang, ...props }: { lang: Lang } & React.HTMLA
     <section id="contact" {...props} className="relative">
       {/* Section padding */}
       <div className="pt-[64px] pb-[64px] px-6">
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-md mx-auto lg:max-w-lg">
           {/* Section title */}
           <motion.h2
             ref={titleRef}
@@ -52,14 +52,14 @@ export default function Contact({ lang, ...props }: { lang: Lang } & React.HTMLA
                   <span className="text-primary shrink-0 opacity-60 group-hover:opacity-100 transition-opacity">
                     {link.icon}
                   </span>
-                  <span className="font-mono text-[10px] text-primary/40 w-20 shrink-0 tracking-wider">
+                  <span className="font-mono text-[10px] text-primary/40 w-[56px] shrink-0 hidden sm:w-[64px] sm:inline tracking-wider">
                     [{link.label}]
                   </span>
                   <a
                     href={link.href}
                     target={link.href.startsWith("http") ? "_blank" : undefined}
                     rel="noopener noreferrer"
-                    className="text-body-md text-body group-hover:text-primary transition-colors"
+                    className="text-body-md text-body break-all group-hover:text-primary transition-colors min-w-0"
                   >
                     {link.value}
                   </a>

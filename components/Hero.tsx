@@ -172,7 +172,7 @@ export default function Hero() {
       <ParticleGrid />
 
       {/* -- Content (per hero-card-dark: 80px vert / 48px horiz padding) -- */}
-      <div ref={ref} className="relative z-10 max-w-content mx-auto px-6 sm:px-8 lg:px-12 w-full" style={{ paddingTop: "80px", paddingBottom: "200px" }}>
+      <div ref={ref} className="relative z-10 max-w-content mx-auto px-6 sm:px-8 lg:px-12 w-full" style={{ paddingTop: "64px", paddingBottom: "clamp(80px, 15vh, 200px)" }}>
         <div className="flex flex-col lg:flex-row items-start lg:items-center gap-12 lg:gap-16">
           {/* Left: copy area */}
           <div className="flex-1 pt-16 lg:pt-20">
@@ -195,8 +195,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.2, duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-              className="text-on-dark mb-1 tracking-tight"
-              style={{ fontSize: "48px", fontWeight: 700, lineHeight: 1.25 }}
+              className="text-on-dark mb-1 tracking-tight text-display-xl"
             >
               <TypingText text="LIN, SHU-JEN" speed={80} />
             </motion.h1>
@@ -251,13 +250,13 @@ export default function Hero() {
               className="flex flex-wrap gap-x-10 gap-y-6"
             >
               {[
-                { value: "10+", labelEn: "Projects Delivered", labelZh: "完成專案" },
-                { value: "3", labelEn: "NVIDIA Certifications", labelZh: "NVIDIA 認證" },
-                { value: "DGX", labelEn: "Spark Deployed", labelZh: "DGX Spark 部署" },
+                { value: "4", labelEn: "NVIDIA Certifications", labelZh: "NVIDIA 認證" },
+                { value: "4", labelEn: "Featured Projects", labelZh: "精選專案" },
+                { value: "GTC", labelEn: "2026 Exhibitor", labelZh: "GTC 2026 參展" },
               ].map((stat, i) => (
                 <div key={i} className="min-w-0">
-                  <div className="text-[36px] font-bold text-primary leading-none">{stat.value}</div>
-                  <div className="text-[12px] font-normal text-[rgba(255,255,255,0.5)] mt-1 tracking-wide">{isEn ? stat.labelEn : stat.labelZh}</div>
+                  <div className="text-display-lg text-primary leading-none" style={{ fontSize: "28px" }}>{stat.value}</div>
+                  <div className="text-[11px] font-normal text-[rgba(255,255,255,0.5)] mt-1 tracking-wide">{isEn ? stat.labelEn : stat.labelZh}</div>
                 </div>
               ))}
             </motion.div>

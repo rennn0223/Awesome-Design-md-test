@@ -82,7 +82,7 @@ export default function Timeline({ lang, ...props }: { lang: Lang } & React.HTML
   return (
     <section id="timeline" {...props} className="relative">
       {/* Section padding */}
-      <div className="pt-[64px] pb-[64px] px-6">
+      <div className="pt-[48px] pb-[48px] px-6">
         <div className="max-w-4xl mx-auto">
           {/* Section title */}
           <motion.h2
@@ -90,11 +90,11 @@ export default function Timeline({ lang, ...props }: { lang: Lang } & React.HTML
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-            className="text-display-lg text-on-dark text-center mb-4"
+            className="text-display-lg text-on-dark text-center mb-3"
           >
             {lang === "en" ? "EXPERIENCE TIMELINE" : "經歷時間軸"}
           </motion.h2>
-          <div className="w-12 h-px bg-primary mx-auto mb-12" />
+          <div className="w-12 h-px bg-primary mx-auto mb-8" />
 
           {/* Year groups */}
           {groups.map((group) => (

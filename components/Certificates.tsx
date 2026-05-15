@@ -2,10 +2,11 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import type { Lang } from "@/app/providers";
+import { CERTS } from "@/data/certificates";
 
-type CertType = "link" | "preview";
+export type CertType = "link" | "preview";
 
-interface Cert {
+export interface Cert {
   tag: string;
   tagColor: string;
   title: string;
@@ -16,7 +17,6 @@ interface Cert {
   btnEn: string;
   btnZh: string;
   type: CertType;
-  icon?: React.ReactNode;
 }
 
 const ICONS: Record<string, React.ReactNode> = {
@@ -37,63 +37,6 @@ const ICONS: Record<string, React.ReactNode> = {
   ),
 };
 
-const CERTS: Cert[] = [
-  {
-    tag: "NVIDIA_DLI",
-    tagColor: "#76b900",
-    title: "Isaac for Accelerated Robotics",
-    en: "Official certification for deploying AI robotics workflows using NVIDIA Isaac.",
-    zh: "NVIDIA 官方認證，掌握使用 Isaac 部署 AI 機器人工作流之核心能力。",
-    href: "https://learn.nvidia.com/certificates?id=AOuaSDlrRjSNIw37SgD1VQ",
-    btnEn: "> VERIFY_CERTIFICATE",
-    btnZh: "> 官方系統驗證",
-    type: "link",
-  },
-  {
-    tag: "NVIDIA_DLI",
-    tagColor: "#76b900",
-    title: "OpenUSD: Stages, Prims & Attributes",
-    en: "Mastery of Universal Scene Description for Omniverse Digital Twin environments.",
-    zh: "精通通用場景描述 (USD)，用於建構 Omniverse 數位孿生底層環境。",
-    href: "https://learn.nvidia.com/certificates?id=1DHB-ztRROWGqdjyu6qqTQ",
-    btnEn: "> VERIFY_CERTIFICATE",
-    btnZh: "> 官方系統驗證",
-    type: "link",
-  },
-  {
-    tag: "NVIDIA_DLI",
-    tagColor: "#76b900",
-    title: "AI on Jetson Nano",
-    en: "Deployment of deep learning models on Edge AI hardware architectures.",
-    zh: "具備在 Edge AI 邊緣硬體架構上部署深度學習模型之能力。",
-    href: "https://learn.nvidia.com/certificates?id=EN5-FdNJT_KR9akW3bacrg",
-    btnEn: "> VERIFY_CERTIFICATE",
-    btnZh: "> 官方系統驗證",
-    type: "link",
-  },
-  {
-    tag: "LANGUAGE_PRO",
-    tagColor: "#89cf00",
-    title: "Duolingo English Test",
-    en: "Certified English proficiency for international technical communication.",
-    zh: "國際英語能力認證，具備流暢的跨國技術溝通能力。",
-    href: "https://certs.duolingo.com/tlegwwbno75h9itb",
-    btnEn: "> VIEW_SCORE_REPORT",
-    btnZh: "> 查看成績證明",
-    type: "link",
-  },
-  {
-    tag: "HARDWARE_OP",
-    tagColor: "#5a8d00",
-    title: "DJI Drone Professional Training",
-    en: "Certified operational proficiency for commercial UAV deployment.",
-    zh: "大疆專業無人機操作培訓，具備商用無人機部署與操作能力。",
-    image: "/assets/dji_cert.pdf",
-    btnEn: "[ ] PREVIEW_DOCUMENT",
-    btnZh: "[ ] 預覽授權文件",
-    type: "preview",
-  },
-];
 
 function CertCard({
   cert,
@@ -201,7 +144,7 @@ export default function Certificates({ lang, ...props }: { lang: Lang } & React.
   return (
     <>
       <section id="certificates" {...props} className="relative">
-        <div className="pt-[64px] pb-[64px] px-6">
+        <div className="pt-[48px] pb-[48px] px-6">
           <div className="max-w-6xl mx-auto">
             <motion.h2
               ref={titleRef}
@@ -212,7 +155,7 @@ export default function Certificates({ lang, ...props }: { lang: Lang } & React.
             >
               {lang === "en" ? "PROFESSIONAL CERTIFICATES" : "專業認證與授權"}
             </motion.h2>
-            <div className="w-12 h-px bg-primary mx-auto mb-10" />
+            <div className="w-12 h-px bg-primary mx-auto mb-8" />
 
             <div className="grid gap-6 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
               {CERTS.map((c, i) => (

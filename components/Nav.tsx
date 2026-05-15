@@ -41,7 +41,8 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
     <motion.div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-[100] bg-surface-dark flex flex-col items-center pt-[20vh]"
+      className="fixed inset-0 z-[100] bg-surface-dark flex flex-col items-center"
+      style={{ paddingTop: "clamp(60px, 15vh, 120px)" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -131,7 +132,7 @@ export default function Nav() {
     <>
       {/* Primary Nav — per DESIGN.md primary-nav spec */}
       <nav className="fixed top-0 left-0 right-0 z-50 primary-nav" role="navigation" aria-label="Main navigation">
-        <div className="max-w-content mx-auto px-6 flex items-center justify-between h-16">
+        <div className="max-w-content mx-auto px-4 lg:px-6 flex items-center justify-between h-14 lg:h-16">
           {/* Left: Brand */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <span className="text-heading-sm text-on-dark tracking-tight">
@@ -141,12 +142,12 @@ export default function Nav() {
           </Link>
 
           {/* Center: Nav items */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-0.5">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.id}
                 href={item.path}
-                className={`relative inline-flex items-center px-4 py-2 text-sm font-body-strong transition-colors ${
+                className={`relative inline-flex items-center px-3 py-1.5 text-[14px] font-body-strong transition-colors ${
                   active === item.id
                     ? "text-on-dark"
                     : "text-on-dark-mute hover:text-on-dark"
@@ -162,12 +163,12 @@ export default function Nav() {
           </div>
 
           {/* Right: Search + Language + CTA */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             {/* Search trigger */}
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="inline-flex items-center justify-center w-10 h-10 text-on-dark-mute hover:text-on-dark transition-colors"
+              className="inline-flex items-center justify-center w-9 h-9 lg:w-10 lg:h-10 text-on-dark-mute hover:text-on-dark transition-colors"
               aria-label={isEn ? "Search" : "搜尋"}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -179,21 +180,21 @@ export default function Nav() {
             {/* Language toggle */}
             <button
               onClick={() => setLang(lang === "en" ? "zh" : "en")}
-              className="hidden sm:inline-flex text-sm font-body-strong px-3 py-2 text-on-dark-mute hover:text-on-dark transition-colors"
+              className="hidden sm:inline-flex text-[14px] font-body-strong px-2.5 py-1.5 text-on-dark-mute hover:text-on-dark transition-colors"
             >
               {isEn ? "中文" : "EN"}
             </button>
 
             {/* Get Started CTA */}
             <Link href="/contact">
-              <button className="hidden sm:inline-flex button-primary text-button-sm" style={{ height: 36, padding: "8px 16px" }}>
+              <button className="hidden lg:inline-flex button-primary text-button-sm" style={{ height: 34, padding: "7px 14px", fontSize: 13 }}>
                 {isEn ? "GET STARTED" : "開始"}
               </button>
             </Link>
 
             {/* Mobile hamburger */}
             <button
-              className="md:hidden w-10 h-10 flex items-center justify-center text-on-dark-mute hover:text-on-dark transition-colors"
+              className="md:hidden w-9 h-9 lg:w-10 lg:h-10 flex items-center justify-center text-on-dark-mute hover:text-on-dark transition-colors"
               onClick={() => setMobileOpen(true)}
               aria-label={isEn ? "Open menu" : "開啟選單"}
             >
@@ -218,7 +219,7 @@ export default function Nav() {
             onClick={() => setMobileOpen(false)}
           />
           <motion.div
-            className="fixed top-0 right-0 z-[70] h-full w-80 max-w-[85vw] bg-surface-dark border-l border-hairline-strong md:hidden"
+            className="fixed top-0 right-0 z-[70] h-full w-72 max-w-[80vw] bg-surface-dark border-l border-hairline-strong md:hidden"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
