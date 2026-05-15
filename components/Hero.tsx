@@ -4,6 +4,30 @@ import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
 import { useLang } from "@/app/providers";
 
+/* -- Typing / blinking cursor effect -- */
+function TypingText({ text, delay = 0, speed = 60 }: { text: string; delay?: number; speed?: number }) {
+  const [visible, setVisible] = useState(0);
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    if (visible >= text.length) {
+      setDone(true);
+      return;
+    }
+    const timer = setTimeout(() => setVisible((v) => v + 1), speed);
+    return () => clearTimeout(timer);
+  }, [visible, text.length, speed]);
+
+  if (delay > 0) return <TypingText text={text} delay={delay - speed} speed={speed} />;
+
+  return (
+    <span className="inline-flex items-center">
+      <span className="overflow-hidden whitespace-nowrap">{text.slice(0, visible)}</span>
+      {!done && <span className="inline-block w-[2px] h-[1em] bg-primary ml-[2px] animate-pulse" />}
+    </span>
+  );
+}
+
 /* -- Animated particle grid background -- */
 function ParticleGrid() {
   const count = 60;
@@ -166,7 +190,7 @@ export default function Hero() {
               <span className="hidden sm:inline text-xs text-primary/30">v2.6.0</span>
             </motion.div>
 
-            {/* Name — display-xl per spec */}
+            {/* Name — display-xl per spec — with typing effect */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -174,7 +198,7 @@ export default function Hero() {
               className="text-on-dark mb-1 tracking-tight"
               style={{ fontSize: "48px", fontWeight: 700, lineHeight: 1.25 }}
             >
-              LIN, SHU-JEN
+              <TypingText text="LIN, SHU-JEN" speed={80} />
             </motion.h1>
 
             {/* Title — caption-md eyebrow + display-lg */}
